@@ -254,27 +254,18 @@
         const btn = document.getElementById('btn-submit');
         const inputZap = document.getElementById('input-zap');
 
-        // --- LÓGICA DE LIMPEZA EM TEMPO REAL ---
-
-        // Para inputs de texto/data: remove erro ao digitar
-        f.querySelectorAll('input[required], textarea').forEach(campo => {
-            campo.addEventListener('input', () => {
-                campo.classList.remove('campo-erro');
+        // --- NOVA LÓGICA DE LIMPEZA GLOBAL ---
+        // Essa função remove o vermelho de TODOS os campos de uma vez
+        function limparErrosGeral() {
+            document.querySelectorAll('.campo-erro, .stars-erro, .grid-erro').forEach(el => {
+                el.classList.remove('campo-erro', 'stars-erro', 'grid-erro');
             });
-        });
+        }
 
-        // Para botões (estrelas/grid/auth): remove erro ao clicar
-        f.querySelectorAll('input[type="radio"]').forEach(radio => {
-            radio.addEventListener('change', () => {
-                const nome = radio.name;
-                let container;
-                if(nome === 'como_soube') container = document.getElementById('grupo-como-soube');
-                else if(nome === 'autoriza_marketing') container = document.getElementById('grupo-autoriza');
-                else container = document.getElementById(`grupo-${nome}`);
-                
-                if(container) container.classList.remove('stars-erro', 'grid-erro');
-            });
-        });
+        // Adiciona o ouvidor de "interação" no formulário inteiro
+        // Qualquer digitação ou clique em rádio limpa todos os avisos
+        f.addEventListener('input', limparErrosGeral);
+        f.addEventListener('change', limparErrosGeral);
 
         // MÁSCARA ZAP
         inputZap.addEventListener('input', (e) => {
