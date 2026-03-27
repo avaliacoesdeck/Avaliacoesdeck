@@ -14,7 +14,6 @@
         :root {
             --deck-wood: #d2995e; 
             --star-active: #f1c40f;
-            /* Removemos --erro-cor vermelha agressiva */
         }
 
         html, body { margin: 0; padding: 0; width: 100%; overflow-x: hidden; background-color: #1a1a1a; scroll-behavior: smooth; }
@@ -44,23 +43,24 @@
         .pergunta-label { display: block; text-align: left; margin: 15px 0 10px; font-weight: bold; font-size: 0.85rem; color: #fff; text-shadow: 1px 1px 3px #000; position: relative; }
         .pergunta-label i { color: var(--deck-wood); margin-right: 8px; font-size: 0.9rem; }
 
-        /* --- ESTILO DO BALÃO DE ERRO (TOOLTIP) - AGORA COMBINANDO --- */
+        /* --- ESTILO DO BALÃO DE ERRO (TOOLTIP) - AGORA EM BRANCO PARA CONTRASTE --- */
         .balao-erro {
-            position: absolute; bottom: 105%; left: 0; 
-            background: #111; /* Cor escura sólida que combina com o fundo */
-            color: var(--deck-wood); /* Texto em dourado premium, sem vermelho */
-            padding: 6px 12px; border-radius: 6px; font-size: 0.7rem; font-weight: bold;
-            white-space: nowrap; pointer-events: none; z-index: 10;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.3); display: none;
+            position: absolute; bottom: 110%; left: 0; 
+            background: #ffffff; /* Fundo branco puro */
+            color: #000000; /* Texto preto para leitura total */
+            padding: 7px 14px; border-radius: 8px; font-size: 0.75rem; font-weight: 900;
+            white-space: nowrap; pointer-events: none; z-index: 20;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.4); display: none;
+            text-transform: uppercase; letter-spacing: 0.5px;
             animation: bounceIn 0.4s ease;
         }
         .balao-erro::after {
             content: ''; position: absolute; top: 100%; left: 15px;
-            border-width: 6px; border-style: solid; 
-            border-color: #111 transparent transparent transparent; /* Seta combina com fundo do balão */
+            border-width: 7px; border-style: solid; 
+            border-color: #ffffff transparent transparent transparent; /* Seta branca combinando */
         }
         @keyframes bounceIn {
-            0% { opacity: 0; transform: translateY(5px) scale(0.9); }
+            0% { opacity: 0; transform: translateY(8px) scale(0.9); }
             100% { opacity: 1; transform: translateY(0) scale(1); }
         }
 
@@ -73,8 +73,7 @@
             width: 100%; padding: 12px; background: rgba(0, 0, 0, 0.5); border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 10px; color: white; font-size: 1rem; outline: none; margin-bottom: 10px; transition: 0.3s;
         }
 
-        /* --- REMOVEMOS VISUAL DE ERRO NAS BORDAS/FUNDOS --- */
-        /* .campo-erro, .stars-erro rules removed */
+        /* Sem bordas de erro conforme pedido */
 
         .opcoes-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px; margin-bottom: 20px; padding: 8px; border-radius: 10px; border: 1px solid transparent; transition: 0.3s; position: relative; }
         .opcao-item input { display: none; }
@@ -204,15 +203,11 @@
         const btn = document.getElementById('btn-submit');
         const inputZap = document.getElementById('input-zap');
 
-        // --- FUNÇÃO GLOBAL DE LIMPEZA GERAL ---
         function limparTudo() {
-            // Removemos bordas de erro (embora não existam mais visualmente)
             document.querySelectorAll('.campo-erro, .stars-erro').forEach(el => el.classList.remove('campo-erro', 'stars-erro'));
-            // Removemos TODOS os balões de erro de uma vez ao toque
             document.querySelectorAll('.balao-erro').forEach(el => el.style.display = 'none');
         }
 
-        // Limpamos tudo a qualquer interação no formulário
         f.addEventListener('input', limparTudo);
         f.addEventListener('change', limparTudo);
 
@@ -232,20 +227,17 @@
             limparTudo();
             let erros = [];
             
-            // 1. Valida Radios (Estrelas, Grid, Autorização)
             const grupos = ['refeicao', 'atendimento', 'recomenda', 'como_soube', 'autoriza_marketing'];
             grupos.forEach(nome => {
                 if (!f.querySelector(`input[name="${nome}"]:checked`)) {
                     let container = document.getElementById(nome === 'como_soube' ? 'grupo-como-soube' : nome === 'autoriza_marketing' ? 'grupo-autoriza' : `grupo-${nome}`);
                     let balao = container.previousElementSibling.querySelector('.balao-erro');
-                    // Mantemos a classe de erro para JS, mas o CSS não pinta nada de vermelho
                     container.classList.add('stars-erro');
                     balao.style.display = 'block';
                     erros.push(container);
                 }
             });
 
-            // 2. Valida Inputs (Nome, Zap, Email, Data)
             f.querySelectorAll('input[required]:not([type="radio"])').forEach(input => {
                 let balao = input.previousElementSibling.querySelector('.balao-erro');
                 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -264,7 +256,6 @@
             });
 
             if (erros.length > 0) {
-                // Sobe a página suavemente até o primeiro erro
                 erros[0].scrollIntoView({ behavior: 'smooth', block: 'center' });
                 return;
             }
