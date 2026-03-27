@@ -66,7 +66,7 @@
         .pergunta-label { display: block; text-align: left; margin: 15px 0 10px; font-weight: bold; font-size: 0.85rem; color: #fff; text-shadow: 1px 1px 3px #000; }
         .pergunta-label i { color: var(--deck-wood); margin-right: 8px; font-size: 0.9rem; }
 
-        .stars { display: flex; flex-direction: row-reverse; justify-content: center; gap: 8px; margin-bottom: 10px; padding: 10px; border-radius: 10px; transition: 0.3s; }
+        .stars { display: flex; flex-direction: row-reverse; justify-content: center; gap: 8px; margin-bottom: 10px; padding: 10px; border-radius: 10px; border: 1px solid transparent; transition: 0.3s; }
         .stars input { display: none; }
         .stars label { font-size: 2rem; color: rgba(255,255,255,0.2); cursor: pointer; transition: 0.2s; }
         .stars input:checked ~ label, .stars label:hover, .stars label:hover ~ label { color: var(--star-active); text-shadow: 0 0 8px rgba(241, 196, 15, 0.5); }
@@ -76,19 +76,23 @@
         }
         input[type="date"]::-webkit-calendar-picker-indicator { filter: invert(1); }
 
-        /* --- ESTILO DE ERRO --- */
+        /* --- ESTILOS DE ERRO --- */
         .campo-erro {
             border-color: var(--erro-cor) !important;
-            box-shadow: 0 0 12px rgba(255, 77, 77, 0.4) !important;
+            box-shadow: 0 0 10px rgba(255, 77, 77, 0.3) !important;
             background: rgba(255, 77, 77, 0.05) !important;
         }
         .stars-erro {
-            background: rgba(255, 77, 77, 0.15);
-            border: 1px solid var(--erro-cor);
+            border-color: var(--erro-cor) !important;
+            background: rgba(255, 77, 77, 0.1) !important;
+        }
+        .grid-erro {
+            border: 1px solid var(--erro-cor) !important;
+            background: rgba(255, 77, 77, 0.1) !important;
         }
 
         .opcoes-grid {
-            display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px; margin-bottom: 20px; padding: 5px; border-radius: 8px; transition: 0.3s;
+            display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px; margin-bottom: 20px; padding: 8px; border-radius: 10px; border: 1px solid transparent; transition: 0.3s;
         }
         .opcao-item input { display: none; }
         .opcao-item label {
@@ -101,7 +105,7 @@
             background: rgba(210, 153, 94, 0.2); border-color: var(--deck-wood); color: var(--deck-wood); font-weight: bold;
         }
 
-        .auth-group { margin-top: 15px; text-align: left; padding: 5px; border-radius: 10px; transition: 0.3s; }
+        .auth-group { margin-top: 15px; text-align: left; padding: 8px; border-radius: 10px; border: 1px solid transparent; transition: 0.3s; }
         .auth-option {
             display: flex; align-items: center; background: rgba(255, 255, 255, 0.05);
             border: 1px solid rgba(255, 255, 255, 0.1); padding: 12px; border-radius: 10px;
@@ -182,15 +186,15 @@
                     </div>
                     <div class="opcao-item">
                         <input type="radio" name="como_soube" id="opt-google" value="Google">
-                        <label for="opt-google">Google</label>
+                        <label for="opt-google">Pesquisando no Google</label>
                     </div>
                     <div class="opcao-item">
-                        <input type="radio" name="como_soube" id="opt-amigos" value="Amigos">
-                        <label for="opt-amigos">Amigos</label>
+                        <input type="radio" name="como_soube" id="opt-amigos" value="Amigos/Familia">
+                        <label for="opt-amigos">Amigos/Familia</label>
                     </div>
                     <div class="opcao-item">
                         <input type="radio" name="como_soube" id="opt-passando" value="Passando">
-                        <label for="opt-passando">Passando</label>
+                        <label for="opt-passando">Passando em Frente</label>
                     </div>
                     <div class="opcao-item">
                         <input type="radio" name="como_soube" id="opt-outros" value="Outros">
@@ -250,6 +254,28 @@
         const btn = document.getElementById('btn-submit');
         const inputZap = document.getElementById('input-zap');
 
+        // --- LÓGICA DE LIMPEZA EM TEMPO REAL ---
+
+        // Para inputs de texto/data: remove erro ao digitar
+        f.querySelectorAll('input[required], textarea').forEach(campo => {
+            campo.addEventListener('input', () => {
+                campo.classList.remove('campo-erro');
+            });
+        });
+
+        // Para botões (estrelas/grid/auth): remove erro ao clicar
+        f.querySelectorAll('input[type="radio"]').forEach(radio => {
+            radio.addEventListener('change', () => {
+                const nome = radio.name;
+                let container;
+                if(nome === 'como_soube') container = document.getElementById('grupo-como-soube');
+                else if(nome === 'autoriza_marketing') container = document.getElementById('grupo-autoriza');
+                else container = document.getElementById(`grupo-${nome}`);
+                
+                if(container) container.classList.remove('stars-erro', 'grid-erro');
+            });
+        });
+
         // MÁSCARA ZAP
         inputZap.addEventListener('input', (e) => {
             let value = e.target.value.replace(/\D/g, "");
@@ -269,16 +295,9 @@
 
         f.onsubmit = (e) => {
             e.preventDefault();
-            
-            // --- LÓGICA DE VALIDAÇÃO PREMIUM ---
             let erros = [];
             
-            // 1. Limpa erros antigos
-            document.querySelectorAll('.campo-erro, .stars-erro').forEach(el => {
-                el.classList.remove('campo-erro', 'stars-erro');
-            });
-
-            // 2. Valida Rádios (Estrelas e Grids)
+            // Valida Radios
             const gruposRadio = ['refeicao', 'atendimento', 'recomenda', 'como_soube', 'autoriza_marketing'];
             gruposRadio.forEach(nome => {
                 const selecionado = f.querySelector(`input[name="${nome}"]:checked`);
@@ -293,7 +312,7 @@
                 }
             });
 
-            // 3. Valida Inputs de Texto/Data
+            // Valida Texto
             const inputsTexto = f.querySelectorAll('input[required]:not([type="radio"])');
             inputsTexto.forEach(input => {
                 if (!input.value.trim()) {
@@ -302,13 +321,11 @@
                 }
             });
 
-            // 4. Se houver erro, sobe a página até o primeiro
             if (erros.length > 0) {
                 erros[0].scrollIntoView({ behavior: 'smooth', block: 'center' });
-                return; // Para o envio
+                return;
             }
 
-            // --- SE TUDO ESTIVER OK, ENVIA ---
             btn.innerText = "ENVIANDO...";
             btn.disabled = true;
             const nomeUsuario = f.nome.value.split(' ')[0].toUpperCase();
