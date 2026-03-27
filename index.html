@@ -34,7 +34,6 @@
 
         .container { width: 92%; max-width: 420px; margin-bottom: 30px; }
 
-        /* --- KARD DE PROMOÇÃO NO TOPO (MISSING FROM LAST VERSION) --- */
         @keyframes promoPulsar {
             0% { transform: scale(1); }
             50% { transform: scale(1.04); }
@@ -180,7 +179,9 @@
                     <input type="radio" name="recomenda" id="r1" value="1"><label for="r1" class="fas fa-star"></label>
                 </div>
 
-                <label class="pergunta-label"><i class="fas fa-bullhorn"></i>Como você conheceu o Deck? <span class="balao-erro">PREENCHA ESTE CAMPO</span></label>
+                <label class="pergunta-label"><i class="fas fa-bullhorn"></i>Como você conheceu o Deck? <span class="balao-erro">PREENCHA ESTE CAMPO</span>
+                    <br><span style="font-weight: normal; font-size: 0.75rem; opacity: 0.8; display: block; margin-top: 3px;">marque uma das opções:</span>
+                </label>
                 <div class="opcoes-grid" id="grupo-como-soube">
                     <div class="opcao-item"><input type="radio" name="como_soube" id="opt-insta" value="Instagram" required><label for="opt-insta">Instagram</label></div>
                     <div class="opcao-item"><input type="radio" name="como_soube" id="opt-face" value="Facebook"><label for="opt-face">Facebook</label></div>
@@ -253,14 +254,12 @@
         const btn = document.getElementById('btn-submit');
         const inputZap = document.getElementById('input-zap');
 
-        // --- LÓGICA DE LIMPEZA GLOBAL ---
         function limparErrosGlobal() {
             document.querySelectorAll('.balao-erro').forEach(balao => {
                 balao.style.display = 'none';
             });
         }
 
-        // Limpa tudo ao digitar ou clicar em rádio
         f.addEventListener('input', limparErrosGlobal);
         f.addEventListener('change', limparErrosGlobal);
 
@@ -303,7 +302,6 @@
                     balao.style.display = 'block';
                     erros.push(balao);
                 } 
-                // --- NOVA VALIDAÇÃO DE WHATSAPP ---
                 else if (input.id === 'input-zap') {
                     const cleanZap = input.value.replace(/\D/g, "");
                     if (cleanZap.length < 11) {
@@ -330,7 +328,7 @@
 
             fetch(scriptURL, { method: 'POST', body: new FormData(f) })
                 .then(response => {
-                    document.getElementById('promo-card').style.display = 'none'; // Hides the promo card on success
+                    document.getElementById('promo-card').style.display = 'none';
                     document.getElementById('titles').style.display = 'none';
                     document.getElementById('span-nome').innerText = nomeUsuario;
                     document.getElementById('msg-agradecimento').innerText = "Sua avaliação foi enviada com sucesso! Agora você está participando do sorteio de uma picanha P/2 pessoas. Caso você seja sorteado, entraremos em contato por WhatsApp. Boa sorte!";
