@@ -14,7 +14,7 @@
         :root {
             --deck-wood: #d2995e; 
             --star-active: #f1c40f;
-            --erro-cor: #ff6b6b; /* Vermelho mais bonito (Coral) */
+            --erro-cor: #ff6b6b;
         }
 
         html, body { margin: 0; padding: 0; width: 100%; overflow-x: hidden; background-color: #1a1a1a; scroll-behavior: smooth; }
@@ -38,33 +38,42 @@
         .card {
             background: rgba(0, 0, 0, 0.35); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
             padding: 20px; border-radius: 20px; border: 1px solid rgba(255, 255, 255, 0.1); text-align: center;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5); position: relative;
         }
 
-        .pergunta-label { display: block; text-align: left; margin: 15px 0 10px; font-weight: bold; font-size: 0.85rem; color: #fff; text-shadow: 1px 1px 3px #000; }
+        .pergunta-label { display: block; text-align: left; margin: 15px 0 10px; font-weight: bold; font-size: 0.85rem; color: #fff; text-shadow: 1px 1px 3px #000; position: relative; }
         .pergunta-label i { color: var(--deck-wood); margin-right: 8px; font-size: 0.9rem; }
 
-        .stars { display: flex; flex-direction: row-reverse; justify-content: center; gap: 8px; margin-bottom: 5px; padding: 5px; border-radius: 10px; border: 1px solid transparent; transition: 0.3s; }
+        /* --- ESTILO DO BALÃO DE ERRO (TOOLTIP) --- */
+        .balao-erro {
+            position: absolute; bottom: 105%; left: 0; background: var(--erro-cor); color: #fff;
+            padding: 6px 12px; border-radius: 6px; font-size: 0.7rem; font-weight: bold;
+            white-space: nowrap; pointer-events: none; z-index: 10;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3); display: none;
+            animation: bounceIn 0.4s ease;
+        }
+        .balao-erro::after {
+            content: ''; position: absolute; top: 100%; left: 15px;
+            border-width: 6px; border-style: solid; border-color: var(--erro-cor) transparent transparent transparent;
+        }
+        @keyframes bounceIn {
+            0% { opacity: 0; transform: translateY(5px) scale(0.9); }
+            100% { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        .stars { display: flex; flex-direction: row-reverse; justify-content: center; gap: 8px; margin-bottom: 10px; padding: 10px; border-radius: 10px; border: 1px solid transparent; transition: 0.3s; position: relative; }
         .stars input { display: none; }
         .stars label { font-size: 2rem; color: rgba(255,255,255,0.2); cursor: pointer; transition: 0.2s; }
         .stars input:checked ~ label, .stars label:hover, .stars label:hover ~ label { color: var(--star-active); text-shadow: 0 0 8px rgba(241, 196, 15, 0.5); }
 
         input, textarea {
-            width: 100%; padding: 12px; background: rgba(0, 0, 0, 0.5); border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 10px; color: white; font-size: 1rem; outline: none; margin-bottom: 5px; transition: 0.3s;
+            width: 100%; padding: 12px; background: rgba(0, 0, 0, 0.5); border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 10px; color: white; font-size: 1rem; outline: none; margin-bottom: 10px; transition: 0.3s;
         }
-        input[type="date"]::-webkit-calendar-picker-indicator { filter: invert(1); }
-
-        /* --- ESTILO DAS MENSAGENS DE ERRO --- */
-        .msg-erro {
-            display: none; color: var(--erro-cor); font-size: 0.7rem; text-align: left; margin-bottom: 10px; margin-left: 5px; font-weight: bold;
-            animation: fadeIn 0.3s ease;
-        }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(-5px); } to { opacity: 1; transform: translateY(0); } }
 
         .campo-erro { border-color: var(--erro-cor) !important; background: rgba(255, 107, 107, 0.05) !important; }
         .stars-erro { border-color: var(--erro-cor) !important; background: rgba(255, 107, 107, 0.1) !important; }
 
-        .opcoes-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px; margin-bottom: 5px; padding: 8px; border-radius: 10px; border: 1px solid transparent; transition: 0.3s; }
+        .opcoes-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px; margin-bottom: 20px; padding: 8px; border-radius: 10px; border: 1px solid transparent; transition: 0.3s; position: relative; }
         .opcao-item input { display: none; }
         .opcao-item label {
             display: flex; align-items: center; justify-content: center;
@@ -74,12 +83,8 @@
         }
         .opcao-item input:checked + label { background: rgba(210, 153, 94, 0.2); border-color: var(--deck-wood); color: var(--deck-wood); font-weight: bold; }
 
-        .auth-group { margin-top: 15px; text-align: left; padding: 8px; border-radius: 10px; border: 1px solid transparent; transition: 0.3s; }
-        .auth-option {
-            display: flex; align-items: center; background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1); padding: 12px; border-radius: 10px;
-            margin-bottom: 8px; cursor: pointer; transition: 0.3s;
-        }
+        .auth-group { margin-top: 15px; text-align: left; padding: 8px; border-radius: 10px; border: 1px solid transparent; transition: 0.3s; position: relative; }
+        .auth-option { display: flex; align-items: center; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); padding: 12px; border-radius: 10px; margin-bottom: 8px; cursor: pointer; transition: 0.3s; }
         .auth-option input[type="radio"] { width: 18px; height: 18px; margin-right: 12px; margin-bottom: 0; accent-color: var(--deck-wood); }
         .auth-text { font-size: 0.75rem; color: #ddd; }
         .auth-option:has(input:checked) { background: rgba(210, 153, 94, 0.15); border-color: var(--deck-wood); }
@@ -89,7 +94,7 @@
         #sucesso { display: none; padding: 30px 10px; }
         .check-icon { font-size: 4rem; color: #2ecc71; margin-bottom: 15px; }
 
-        footer { padding: 25px 15px; font-size: 0.7rem; color: #bbb; text-align: center; width: 100%; line-height: 1.6; }
+        footer { padding: 25px 15px; font-size: 0.7rem; color: #bbb; text-align: center; width: 100%; }
         footer strong { color: #fff; }
     </style>
 </head>
@@ -108,7 +113,7 @@
         <div class="card" id="card-principal">
             <form id="feedback-form" novalidate>
                 
-                <label class="pergunta-label"><i class="fas fa-utensils"></i>O que você achou da Refeição?</label>
+                <label class="pergunta-label"><i class="fas fa-utensils"></i>O que você achou da Refeição? <span class="balao-erro">Preencha este campo</span></label>
                 <div class="stars" id="grupo-refeicao">
                     <input type="radio" name="refeicao" id="c5" value="5" required><label for="c5" class="fas fa-star"></label>
                     <input type="radio" name="refeicao" id="c4" value="4"><label for="c4" class="fas fa-star"></label>
@@ -116,9 +121,8 @@
                     <input type="radio" name="refeicao" id="c2" value="2"><label for="c2" class="fas fa-star"></label>
                     <input type="radio" name="refeicao" id="c1" value="1"><label for="c1" class="fas fa-star"></label>
                 </div>
-                <div class="msg-erro" id="erro-refeicao">Preencha este campo</div>
 
-                <label class="pergunta-label"><i class="fas fa-concierge-bell"></i>Nota para o Atendimento:</label>
+                <label class="pergunta-label"><i class="fas fa-concierge-bell"></i>Nota para o Atendimento: <span class="balao-erro">Preencha este campo</span></label>
                 <div class="stars" id="grupo-atendimento">
                     <input type="radio" name="atendimento" id="a5" value="5" required><label for="a5" class="fas fa-star"></label>
                     <input type="radio" name="atendimento" id="a4" value="4"><label for="a4" class="fas fa-star"></label>
@@ -126,9 +130,8 @@
                     <input type="radio" name="atendimento" id="a2" value="2"><label for="a2" class="fas fa-star"></label>
                     <input type="radio" name="atendimento" id="a1" value="1"><label for="a1" class="fas fa-star"></label>
                 </div>
-                <div class="msg-erro" id="erro-atendimento">Preencha este campo</div>
 
-                <label class="pergunta-label"><i class="fas fa-thumbs-up"></i>Recomendaria o Deck?</label>
+                <label class="pergunta-label"><i class="fas fa-thumbs-up"></i>Recomendaria o Deck? <span class="balao-erro">Preencha este campo</span></label>
                 <div class="stars" id="grupo-recomenda">
                     <input type="radio" name="recomenda" id="r5" value="5" required><label for="r5" class="fas fa-star"></label>
                     <input type="radio" name="recomenda" id="r4" value="4"><label for="r4" class="fas fa-star"></label>
@@ -136,9 +139,8 @@
                     <input type="radio" name="recomenda" id="r2" value="2"><label for="r2" class="fas fa-star"></label>
                     <input type="radio" name="recomenda" id="r1" value="1"><label for="r1" class="fas fa-star"></label>
                 </div>
-                <div class="msg-erro" id="erro-recomenda">Preencha este campo</div>
 
-                <label class="pergunta-label"><i class="fas fa-bullhorn"></i>Como você conheceu o Deck?</label>
+                <label class="pergunta-label"><i class="fas fa-bullhorn"></i>Como você conheceu o Deck? <span class="balao-erro">Preencha este campo</span></label>
                 <div class="opcoes-grid" id="grupo-como-soube">
                     <div class="opcao-item"><input type="radio" name="como_soube" id="opt-insta" value="Instagram" required><label for="opt-insta">Instagram</label></div>
                     <div class="opcao-item"><input type="radio" name="como_soube" id="opt-face" value="Facebook"><label for="opt-face">Facebook</label></div>
@@ -147,34 +149,37 @@
                     <div class="opcao-item"><input type="radio" name="como_soube" id="opt-passando" value="Passando"><label for="opt-passando">Passando</label></div>
                     <div class="opcao-item"><input type="radio" name="como_soube" id="opt-outros" value="Outros"><label for="opt-outros">Outros</label></div>
                 </div>
-                <div class="msg-erro" id="erro-como-soube">Preencha este campo</div>
 
-                <label class="pergunta-label"><i class="fas fa-comment-dots"></i>Sugestão ou Elogio (Opcional):</label>
+                <label class="pergunta-label"><i class="fas fa-comment-dots"></i>Alguma sugestão ou elogio?</label>
                 <textarea name="sugestoes" rows="2" placeholder="Sua opinião..."></textarea>
 
                 <hr style="border: 0; border-top: 1px solid rgba(255,255,255,0.1); margin: 20px 0;">
 
-                <label class="pergunta-label"><i class="fas fa-user"></i>Seu Nome:</label>
-                <input type="text" name="nome" placeholder="Digite seu nome" required>
-                <div class="msg-erro" id="erro-nome">Preencha este campo</div>
+                <div style="position: relative;">
+                    <label class="pergunta-label"><i class="fas fa-user"></i>Seu Nome: <span class="balao-erro">Preencha este campo</span></label>
+                    <input type="text" name="nome" placeholder="Digite seu nome" required>
+                </div>
 
-                <label class="pergunta-label"><i class="fab fa-whatsapp"></i>Seu WhatsApp:</label>
-                <input type="tel" name="whatsapp" id="input-zap" placeholder="(19) 99999-9999" maxlength="15" required>
-                <div class="msg-erro" id="erro-whatsapp">Preencha este campo</div>
+                <div style="position: relative;">
+                    <label class="pergunta-label"><i class="fab fa-whatsapp"></i>Seu WhatsApp: <span class="balao-erro">Preencha este campo</span></label>
+                    <input type="tel" name="whatsapp" id="input-zap" placeholder="(19) 99999-9999" maxlength="15" required>
+                </div>
 
-                <label class="pergunta-label"><i class="fas fa-envelope"></i>Seu E-mail:</label>
-                <input type="email" name="email" id="input-email" placeholder="seuemail@exemplo.com" required>
-                <div class="msg-erro" id="erro-email">Preencha este campo corretamente</div>
+                <div style="position: relative;">
+                    <label class="pergunta-label"><i class="fas fa-envelope"></i>Seu E-mail: <span class="balao-erro" id="balao-email">Preencha este campo</span></label>
+                    <input type="email" name="email" id="input-email" placeholder="seuemail@exemplo.com" required>
+                </div>
 
-                <label class="pergunta-label"><i class="fas fa-birthday-cake"></i>Sua Data de Nascimento:</label>
-                <input type="date" name="nascimento" required>
-                <div class="msg-erro" id="erro-nascimento">Preencha este campo</div>
+                <div style="position: relative;">
+                    <label class="pergunta-label"><i class="fas fa-birthday-cake"></i>Sua Data de Nascimento: <span class="balao-erro">Preencha este campo</span></label>
+                    <input type="date" name="nascimento" required>
+                </div>
 
+                <label class="pergunta-label">Autorização de Marketing: <span class="balao-erro">Preencha este campo</span></label>
                 <div class="auth-group" id="grupo-autoriza">
                     <label class="auth-option"><input type="radio" name="autoriza_marketing" value="Sim" required><span class="auth-text">Autorizo envio de promoções.</span></label>
-                    <label class="auth-option"><input type="radio" name="autoriza_marketing" value="Não" required><span class="auth-text">Não autorizo envio.</span></label>
+                    <label class="auth-option"><input type="radio" name="autoriza_marketing" value="Não" required><span class="auth-text">Não autorizo.</span></label>
                 </div>
-                <div class="msg-erro" id="erro-autoriza">Preencha este campo</div>
 
                 <button type="submit" class="btn-enviar" id="btn-submit">ENVIAR E CONCORRER</button>
             </form>
@@ -198,8 +203,8 @@
 
         // --- FUNÇÃO GLOBAL DE LIMPEZA ---
         function limparTudo() {
-            document.querySelectorAll('.campo-erro, .stars-erro, .grid-erro').forEach(el => el.classList.remove('campo-erro', 'stars-erro', 'grid-erro'));
-            document.querySelectorAll('.msg-erro').forEach(el => el.style.display = 'none');
+            document.querySelectorAll('.campo-erro, .stars-erro').forEach(el => el.classList.remove('campo-erro', 'stars-erro'));
+            document.querySelectorAll('.balao-erro').forEach(el => el.style.display = 'none');
         }
 
         f.addEventListener('input', limparTudo);
@@ -218,33 +223,43 @@
 
         f.onsubmit = (e) => {
             e.preventDefault();
-            let erros = [];
             limparTudo();
+            let erros = [];
             
-            // Valida Radios
+            // 1. Valida Radios (Estrelas, Grid, Autorização)
             const grupos = ['refeicao', 'atendimento', 'recomenda', 'como_soube', 'autoriza_marketing'];
             grupos.forEach(nome => {
                 if (!f.querySelector(`input[name="${nome}"]:checked`)) {
                     let container = document.getElementById(nome === 'como_soube' ? 'grupo-como-soube' : nome === 'autoriza_marketing' ? 'grupo-autoriza' : `grupo-${nome}`);
-                    let msg = document.getElementById(`erro-${nome}`);
+                    let balao = container.previousElementSibling.querySelector('.balao-erro');
                     container.classList.add('stars-erro');
-                    msg.style.display = 'block';
+                    balao.style.display = 'block';
                     erros.push(container);
                 }
             });
 
-            // Valida Text/Email/Data
+            // 2. Valida Inputs (Nome, Zap, Email, Data)
             f.querySelectorAll('input[required]:not([type="radio"])').forEach(input => {
-                let msg = document.getElementById(`erro-${input.name === 'whatsapp' ? 'whatsapp' : input.name}`);
+                let balao = input.previousElementSibling.querySelector('.balao-erro');
                 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-                if (!input.value.trim() || (input.type === 'email' && !emailRegex.test(input.value))) {
+                
+                if (!input.value.trim()) {
                     input.classList.add('campo-erro');
-                    msg.style.display = 'block';
+                    balao.innerText = "Preencha este campo";
+                    balao.style.display = 'block';
+                    erros.push(input);
+                } else if (input.type === 'email' && !emailRegex.test(input.value)) {
+                    input.classList.add('campo-erro');
+                    balao.innerText = "E-mail inválido";
+                    balao.style.display = 'block';
                     erros.push(input);
                 }
             });
 
-            if (erros.length > 0) { erros[0].scrollIntoView({ behavior: 'smooth', block: 'center' }); return; }
+            if (erros.length > 0) {
+                erros[0].scrollIntoView({ behavior: 'smooth', block: 'center' });
+                return;
+            }
 
             btn.innerText = "ENVIANDO..."; btn.disabled = true;
             fetch(scriptURL, { method: 'POST', body: new FormData(f) })
