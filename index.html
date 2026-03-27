@@ -14,7 +14,7 @@
         :root {
             --deck-wood: #d2995e; 
             --star-active: #f1c40f;
-            --erro-cor: #ff6b6b;
+            /* Removemos --erro-cor vermelha agressiva */
         }
 
         html, body { margin: 0; padding: 0; width: 100%; overflow-x: hidden; background-color: #1a1a1a; scroll-behavior: smooth; }
@@ -44,9 +44,11 @@
         .pergunta-label { display: block; text-align: left; margin: 15px 0 10px; font-weight: bold; font-size: 0.85rem; color: #fff; text-shadow: 1px 1px 3px #000; position: relative; }
         .pergunta-label i { color: var(--deck-wood); margin-right: 8px; font-size: 0.9rem; }
 
-        /* --- ESTILO DO BALÃO DE ERRO (TOOLTIP) --- */
+        /* --- ESTILO DO BALÃO DE ERRO (TOOLTIP) - AGORA COMBINANDO --- */
         .balao-erro {
-            position: absolute; bottom: 105%; left: 0; background: var(--erro-cor); color: #fff;
+            position: absolute; bottom: 105%; left: 0; 
+            background: #111; /* Cor escura sólida que combina com o fundo */
+            color: var(--deck-wood); /* Texto em dourado premium, sem vermelho */
             padding: 6px 12px; border-radius: 6px; font-size: 0.7rem; font-weight: bold;
             white-space: nowrap; pointer-events: none; z-index: 10;
             box-shadow: 0 4px 10px rgba(0,0,0,0.3); display: none;
@@ -54,7 +56,8 @@
         }
         .balao-erro::after {
             content: ''; position: absolute; top: 100%; left: 15px;
-            border-width: 6px; border-style: solid; border-color: var(--erro-cor) transparent transparent transparent;
+            border-width: 6px; border-style: solid; 
+            border-color: #111 transparent transparent transparent; /* Seta combina com fundo do balão */
         }
         @keyframes bounceIn {
             0% { opacity: 0; transform: translateY(5px) scale(0.9); }
@@ -70,8 +73,8 @@
             width: 100%; padding: 12px; background: rgba(0, 0, 0, 0.5); border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 10px; color: white; font-size: 1rem; outline: none; margin-bottom: 10px; transition: 0.3s;
         }
 
-        .campo-erro { border-color: var(--erro-cor) !important; background: rgba(255, 107, 107, 0.05) !important; }
-        .stars-erro { border-color: var(--erro-cor) !important; background: rgba(255, 107, 107, 0.1) !important; }
+        /* --- REMOVEMOS VISUAL DE ERRO NAS BORDAS/FUNDOS --- */
+        /* .campo-erro, .stars-erro rules removed */
 
         .opcoes-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px; margin-bottom: 20px; padding: 8px; border-radius: 10px; border: 1px solid transparent; transition: 0.3s; position: relative; }
         .opcao-item input { display: none; }
@@ -87,7 +90,7 @@
         .auth-option { display: flex; align-items: center; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); padding: 12px; border-radius: 10px; margin-bottom: 8px; cursor: pointer; transition: 0.3s; }
         .auth-option input[type="radio"] { width: 18px; height: 18px; margin-right: 12px; margin-bottom: 0; accent-color: var(--deck-wood); }
         .auth-text { font-size: 0.75rem; color: #ddd; }
-        .auth-option:has(input:checked) { background: rgba(210, 153, 94, 0.15); border-color: var(--deck-wood); }
+        .auth-option:has(input:checked) { background: rgba(210, 153, 94, 0.15); border-color: var(--deck-wood); color: var(--deck-wood); }
 
         .btn-enviar { background: var(--deck-wood); color: #000; border: none; padding: 18px; width: 100%; border-radius: 12px; font-weight: 900; font-size: 1.1rem; margin-top: 20px; cursor: pointer; text-transform: uppercase; }
 
@@ -201,12 +204,15 @@
         const btn = document.getElementById('btn-submit');
         const inputZap = document.getElementById('input-zap');
 
-        // --- FUNÇÃO GLOBAL DE LIMPEZA ---
+        // --- FUNÇÃO GLOBAL DE LIMPEZA GERAL ---
         function limparTudo() {
+            // Removemos bordas de erro (embora não existam mais visualmente)
             document.querySelectorAll('.campo-erro, .stars-erro').forEach(el => el.classList.remove('campo-erro', 'stars-erro'));
+            // Removemos TODOS os balões de erro de uma vez ao toque
             document.querySelectorAll('.balao-erro').forEach(el => el.style.display = 'none');
         }
 
+        // Limpamos tudo a qualquer interação no formulário
         f.addEventListener('input', limparTudo);
         f.addEventListener('change', limparTudo);
 
@@ -232,6 +238,7 @@
                 if (!f.querySelector(`input[name="${nome}"]:checked`)) {
                     let container = document.getElementById(nome === 'como_soube' ? 'grupo-como-soube' : nome === 'autoriza_marketing' ? 'grupo-autoriza' : `grupo-${nome}`);
                     let balao = container.previousElementSibling.querySelector('.balao-erro');
+                    // Mantemos a classe de erro para JS, mas o CSS não pinta nada de vermelho
                     container.classList.add('stars-erro');
                     balao.style.display = 'block';
                     erros.push(container);
@@ -257,6 +264,7 @@
             });
 
             if (erros.length > 0) {
+                // Sobe a página suavemente até o primeiro erro
                 erros[0].scrollIntoView({ behavior: 'smooth', block: 'center' });
                 return;
             }
