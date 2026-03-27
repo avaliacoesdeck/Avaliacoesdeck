@@ -14,9 +14,10 @@
         :root {
             --deck-wood: #d2995e; 
             --star-active: #f1c40f;
+            --erro-cor: #ff4d4d;
         }
 
-        html, body { margin: 0; padding: 0; width: 100%; overflow-x: hidden; background-color: #1a1a1a; }
+        html, body { margin: 0; padding: 0; width: 100%; overflow-x: hidden; background-color: #1a1a1a; scroll-behavior: smooth; }
 
         body {
             font-family: 'Segoe UI', sans-serif; color: white;
@@ -65,22 +66,29 @@
         .pergunta-label { display: block; text-align: left; margin: 15px 0 10px; font-weight: bold; font-size: 0.85rem; color: #fff; text-shadow: 1px 1px 3px #000; }
         .pergunta-label i { color: var(--deck-wood); margin-right: 8px; font-size: 0.9rem; }
 
-        .stars { display: flex; flex-direction: row-reverse; justify-content: center; gap: 8px; margin-bottom: 10px; }
+        .stars { display: flex; flex-direction: row-reverse; justify-content: center; gap: 8px; margin-bottom: 10px; padding: 10px; border-radius: 10px; transition: 0.3s; }
         .stars input { display: none; }
         .stars label { font-size: 2rem; color: rgba(255,255,255,0.2); cursor: pointer; transition: 0.2s; }
         .stars input:checked ~ label, .stars label:hover, .stars label:hover ~ label { color: var(--star-active); text-shadow: 0 0 8px rgba(241, 196, 15, 0.5); }
 
         input, textarea {
-            width: 100%; padding: 12px; background: rgba(0, 0, 0, 0.5); border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 10px; color: white; font-size: 1rem; outline: none; margin-bottom: 10px;
+            width: 100%; padding: 12px; background: rgba(0, 0, 0, 0.5); border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 10px; color: white; font-size: 1rem; outline: none; margin-bottom: 10px; transition: 0.3s;
         }
         input[type="date"]::-webkit-calendar-picker-indicator { filter: invert(1); }
 
-        /* GRID COMPACTO DE 3 COLUNAS */
+        /* --- ESTILO DE ERRO --- */
+        .campo-erro {
+            border-color: var(--erro-cor) !important;
+            box-shadow: 0 0 12px rgba(255, 77, 77, 0.4) !important;
+            background: rgba(255, 77, 77, 0.05) !important;
+        }
+        .stars-erro {
+            background: rgba(255, 77, 77, 0.15);
+            border: 1px solid var(--erro-cor);
+        }
+
         .opcoes-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr 1fr; /* Três colunas iguais */
-            gap: 6px;
-            margin-bottom: 20px;
+            display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px; margin-bottom: 20px; padding: 5px; border-radius: 8px; transition: 0.3s;
         }
         .opcao-item input { display: none; }
         .opcao-item label {
@@ -93,8 +101,7 @@
             background: rgba(210, 153, 94, 0.2); border-color: var(--deck-wood); color: var(--deck-wood); font-weight: bold;
         }
 
-        /* ESTILO AUTORIZAÇÃO */
-        .auth-group { margin-top: 15px; text-align: left; }
+        .auth-group { margin-top: 15px; text-align: left; padding: 5px; border-radius: 10px; transition: 0.3s; }
         .auth-option {
             display: flex; align-items: center; background: rgba(255, 255, 255, 0.05);
             border: 1px solid rgba(255, 255, 255, 0.1); padding: 12px; border-radius: 10px;
@@ -134,10 +141,10 @@
         </div>
 
         <div class="card" id="card-principal">
-            <form id="feedback-form">
+            <form id="feedback-form" novalidate>
                 
                 <label class="pergunta-label"><i class="fas fa-utensils"></i>O que você achou da Refeição?</label>
-                <div class="stars">
+                <div class="stars" id="grupo-refeicao">
                     <input type="radio" name="refeicao" id="c5" value="5" required><label for="c5" class="fas fa-star"></label>
                     <input type="radio" name="refeicao" id="c4" value="4"><label for="c4" class="fas fa-star"></label>
                     <input type="radio" name="refeicao" id="c3" value="3"><label for="c3" class="fas fa-star"></label>
@@ -146,7 +153,7 @@
                 </div>
 
                 <label class="pergunta-label"><i class="fas fa-concierge-bell"></i>Nota para o Atendimento:</label>
-                <div class="stars">
+                <div class="stars" id="grupo-atendimento">
                     <input type="radio" name="atendimento" id="a5" value="5" required><label for="a5" class="fas fa-star"></label>
                     <input type="radio" name="atendimento" id="a4" value="4"><label for="a4" class="fas fa-star"></label>
                     <input type="radio" name="atendimento" id="a3" value="3"><label for="a3" class="fas fa-star"></label>
@@ -155,7 +162,7 @@
                 </div>
 
                 <label class="pergunta-label"><i class="fas fa-thumbs-up"></i>Recomendaria o Deck?</label>
-                <div class="stars">
+                <div class="stars" id="grupo-recomenda">
                     <input type="radio" name="recomenda" id="r5" value="5" required><label for="r5" class="fas fa-star"></label>
                     <input type="radio" name="recomenda" id="r4" value="4"><label for="r4" class="fas fa-star"></label>
                     <input type="radio" name="recomenda" id="r3" value="3"><label for="r3" class="fas fa-star"></label>
@@ -164,7 +171,7 @@
                 </div>
 
                 <label class="pergunta-label"><i class="fas fa-bullhorn"></i>Como você conheceu o Deck?</label>
-                <div class="opcoes-grid">
+                <div class="opcoes-grid" id="grupo-como-soube">
                     <div class="opcao-item">
                         <input type="radio" name="como_soube" id="opt-insta" value="Instagram" required>
                         <label for="opt-insta">Instagram</label>
@@ -178,12 +185,12 @@
                         <label for="opt-google">Google</label>
                     </div>
                     <div class="opcao-item">
-                        <input type="radio" name="como_soube" id="opt-amigos" value="Amigos/Familia">
-                        <label for="opt-amigos">Amigos/Familia</label>
+                        <input type="radio" name="como_soube" id="opt-amigos" value="Amigos">
+                        <label for="opt-amigos">Amigos</label>
                     </div>
                     <div class="opcao-item">
                         <input type="radio" name="como_soube" id="opt-passando" value="Passando">
-                        <label for="opt-passando">Passando em frente</label>
+                        <label for="opt-passando">Passando</label>
                     </div>
                     <div class="opcao-item">
                         <input type="radio" name="como_soube" id="opt-outros" value="Outros">
@@ -208,14 +215,14 @@
                 <label class="pergunta-label"><i class="fas fa-birthday-cake"></i>Sua Data de Nascimento:</label>
                 <input type="date" name="nascimento" required>
 
-                <div class="auth-group">
+                <div class="auth-group" id="grupo-autoriza">
                     <label class="auth-option">
                         <input type="radio" name="autoriza_marketing" value="Sim" required>
-                        <span class="auth-text">Autorizo o uso dos dados acima para o envio de promoções e novidades.</span>
+                        <span class="auth-text">Autorizo o envio de promoções e novidades.</span>
                     </label>
                     <label class="auth-option">
                         <input type="radio" name="autoriza_marketing" value="Não" required>
-                        <span class="auth-text">Não autorizo o uso dos dados acima para o envio de promoções e novidades.</span>
+                        <span class="auth-text">Não autorizo o envio de promoções e novidades.</span>
                     </label>
                 </div>
 
@@ -243,6 +250,7 @@
         const btn = document.getElementById('btn-submit');
         const inputZap = document.getElementById('input-zap');
 
+        // MÁSCARA ZAP
         inputZap.addEventListener('input', (e) => {
             let value = e.target.value.replace(/\D/g, "");
             if (value.length > 11) value = value.slice(0, 11);
@@ -256,11 +264,51 @@
                 e.target.value = value.replace(/^(\d*)$/, "($1");
             }
         });
-        
+
         const scriptURL = 'COLOQUE_AQUI_O_LINK_DO_SCRIPT_DA_PLANILHA_DO_DECK';
 
         f.onsubmit = (e) => {
             e.preventDefault();
+            
+            // --- LÓGICA DE VALIDAÇÃO PREMIUM ---
+            let erros = [];
+            
+            // 1. Limpa erros antigos
+            document.querySelectorAll('.campo-erro, .stars-erro').forEach(el => {
+                el.classList.remove('campo-erro', 'stars-erro');
+            });
+
+            // 2. Valida Rádios (Estrelas e Grids)
+            const gruposRadio = ['refeicao', 'atendimento', 'recomenda', 'como_soube', 'autoriza_marketing'];
+            gruposRadio.forEach(nome => {
+                const selecionado = f.querySelector(`input[name="${nome}"]:checked`);
+                if (!selecionado) {
+                    let container;
+                    if(nome === 'como_soube') container = document.getElementById('grupo-como-soube');
+                    else if(nome === 'autoriza_marketing') container = document.getElementById('grupo-autoriza');
+                    else container = document.getElementById(`grupo-${nome}`);
+                    
+                    container.classList.add('stars-erro');
+                    erros.push(container);
+                }
+            });
+
+            // 3. Valida Inputs de Texto/Data
+            const inputsTexto = f.querySelectorAll('input[required]:not([type="radio"])');
+            inputsTexto.forEach(input => {
+                if (!input.value.trim()) {
+                    input.classList.add('campo-erro');
+                    erros.push(input);
+                }
+            });
+
+            // 4. Se houver erro, sobe a página até o primeiro
+            if (erros.length > 0) {
+                erros[0].scrollIntoView({ behavior: 'smooth', block: 'center' });
+                return; // Para o envio
+            }
+
+            // --- SE TUDO ESTIVER OK, ENVIA ---
             btn.innerText = "ENVIANDO...";
             btn.disabled = true;
             const nomeUsuario = f.nome.value.split(' ')[0].toUpperCase();
@@ -273,6 +321,7 @@
                     document.getElementById('msg-agradecimento').innerText = "Sua avaliação foi enviada com sucesso! Boa sorte no sorteio!";
                     f.style.display = 'none';
                     document.getElementById('sucesso').style.display = 'block';
+                    window.scrollTo(0, 0);
                 })
                 .catch(error => {
                     btn.innerText = "ERRO! TENTE NOVAMENTE.";
