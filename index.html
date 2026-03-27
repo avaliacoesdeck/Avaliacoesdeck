@@ -34,45 +34,29 @@
 
         .container { width: 92%; max-width: 420px; margin-bottom: 30px; }
 
-        @keyframes promoPulsar {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.04); }
-            100% { transform: scale(1); }
-        }
-
-        @keyframes bordaBrilhante {
-            0% { box-shadow: 0 0 15px rgba(210, 153, 94, 0.4); border-color: var(--deck-wood); }
-            50% { box-shadow: 0 0 30px rgba(210, 153, 94, 0.9); border-color: #fff; }
-            100% { box-shadow: 0 0 15px rgba(210, 153, 94, 0.4); border-color: var(--deck-wood); }
-        }
-
         .promo-card {
             background: rgba(0, 0, 0, 0.85); border: 2px solid var(--deck-wood);
             border-radius: 18px; padding: 12px; margin-bottom: 15px; text-align: center;
-            animation: promoPulsar 2s ease-in-out infinite, bordaBrilhante 1.5s ease-in-out infinite;
-            position: relative; z-index: 1;
+            animation: promoPulsar 2s ease-in-out infinite;
         }
-
-        .promo-icon { font-size: 1.6rem; color: var(--deck-wood); margin-bottom: 5px; }
-        .promo-txt { font-size: 0.8rem; font-weight: bold; margin: 2px 0; color: white; }
-        .promo-prize { font-size: 1rem; color: var(--deck-wood); font-weight: 900; text-transform: uppercase; text-shadow: 1px 1px 4px #000; }
+        @keyframes promoPulsar { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.03); } }
 
         .card {
             background: rgba(0, 0, 0, 0.35); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
-            padding: 20px; border-radius: 20px; border: 1px solid rgba(255, 255, 255, 0.1); text-align: center;
+            padding: 25px; border-radius: 25px; border: 1px solid rgba(255, 255, 255, 0.1); text-align: center;
             box-shadow: 0 10px 30px rgba(0,0,0,0.5); position: relative;
         }
 
         .pergunta-label { display: block; text-align: left; margin: 15px 0 10px; font-weight: bold; font-size: 0.85rem; color: #fff; text-shadow: 1px 1px 3px #000; position: relative; }
         .pergunta-label i { color: var(--deck-wood); margin-right: 8px; font-size: 0.9rem; }
 
-        /* --- BALÃO DE ERRO EFEITO VIDRO --- */
+        /* --- BALÃO DE ERRO (SISTEMA BONITO) --- */
         .balao-erro {
-            position: absolute; bottom: 110%; left: 0; 
+            position: absolute; bottom: 115%; left: 0; 
             background: rgba(255, 255, 255, 0.1); 
             backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
             border: 1px solid rgba(255, 255, 255, 0.2);
-            color: #fff; padding: 8px 15px; border-radius: 12px; font-size: 0.75rem; font-weight: bold;
+            color: #fff; padding: 8px 15px; border-radius: 12px; font-size: 0.72rem; font-weight: bold;
             white-space: nowrap; pointer-events: none; z-index: 100;
             box-shadow: 0 8px 32px rgba(0,0,0,0.3); display: none;
             animation: subir 0.4s ease forwards;
@@ -81,24 +65,19 @@
             content: ''; position: absolute; top: 100%; left: 15px;
             border-width: 6px; border-style: solid; border-color: rgba(255,255,255,0.1) transparent transparent transparent;
         }
-        @keyframes subir {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+        @keyframes subir { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        .stars { display: flex; flex-direction: row-reverse; justify-content: center; gap: 8px; margin-bottom: 10px; padding: 10px; border-radius: 10px; transition: 0.3s; }
+        .stars { display: flex; flex-direction: row-reverse; justify-content: center; gap: 8px; margin-bottom: 10px; padding: 10px; border-radius: 10px; }
         .stars input { display: none; }
         .stars label { font-size: 2rem; color: rgba(255,255,255,0.2); cursor: pointer; transition: 0.2s; }
         .stars input:checked ~ label, .stars label:hover, .stars label:hover ~ label { color: var(--star-active); text-shadow: 0 0 8px rgba(241, 196, 15, 0.5); }
 
         input, textarea {
-            width: 100%; padding: 12px; background: rgba(0, 0, 0, 0.5); border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 10px; color: white; font-size: 1rem; outline: none; margin-bottom: 10px; transition: 0.3s;
+            width: 100%; padding: 12px; background: rgba(0, 0, 0, 0.5); border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 10px; color: white; font-size: 1rem; outline: none; margin-bottom: 10px;
         }
         input[type="date"]::-webkit-calendar-picker-indicator { filter: invert(1); }
 
-        .opcoes-grid {
-            display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px; margin-bottom: 20px; padding: 8px; border-radius: 10px; transition: 0.3s;
-        }
+        .opcoes-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px; margin-bottom: 20px; padding: 8px; }
         .opcao-item input { display: none; }
         .opcao-item label {
             display: flex; align-items: center; justify-content: center;
@@ -106,29 +85,19 @@
             padding: 8px 2px; border-radius: 6px; font-size: 0.65rem; cursor: pointer; transition: 0.2s;
             height: 100%; text-align: center; text-transform: uppercase;
         }
-        .opcao-item input:checked + label {
-            background: rgba(210, 153, 94, 0.2); border-color: var(--deck-wood); color: var(--deck-wood); font-weight: bold;
-        }
+        .opcao-item input:checked + label { background: rgba(210, 153, 94, 0.2); border-color: var(--deck-wood); color: var(--deck-wood); font-weight: bold; }
 
-        .auth-group { margin-top: 15px; text-align: left; padding: 8px; border-radius: 10px; transition: 0.3s; }
-        .auth-option {
-            display: flex; align-items: center; background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1); padding: 12px; border-radius: 10px;
-            margin-bottom: 8px; cursor: pointer; transition: 0.3s;
-        }
-        .auth-option input[type="radio"] { width: 18px; height: 18px; margin-right: 12px; margin-bottom: 0; accent-color: var(--deck-wood); }
+        .auth-group { margin-top: 15px; text-align: left; padding: 8px; }
+        .auth-option { display: flex; align-items: center; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); padding: 12px; border-radius: 10px; margin-bottom: 8px; cursor: pointer; }
+        .auth-option input[type="radio"] { width: 18px; height: 18px; margin-right: 12px; accent-color: var(--deck-wood); }
         .auth-text { font-size: 0.72rem; line-height: 1.3; color: #ddd; }
-        .auth-option:has(input:checked) { background: rgba(210, 153, 94, 0.15); border-color: var(--deck-wood); }
 
-        .btn-enviar {
-            background: var(--deck-wood); color: #000; border: none; padding: 18px; width: 100%; border-radius: 12px; font-weight: 900; font-size: 1.1rem; margin-top: 20px; cursor: pointer; text-transform: uppercase;
-        }
+        .btn-enviar { background: var(--deck-wood); color: #000; border: none; padding: 18px; width: 100%; border-radius: 12px; font-weight: 900; font-size: 1.1rem; margin-top: 20px; cursor: pointer; text-transform: uppercase; }
 
-        #sucesso { display: none; padding: 30px 10px; }
+        #sucesso { display: none; padding: 40px 10px; }
         .check-icon { font-size: 4rem; color: #2ecc71; margin-bottom: 15px; }
 
-        footer { padding: 25px 15px; font-size: 0.7rem; color: #bbb; text-align: center; width: 100%; line-height: 1.6; }
-        footer strong { color: #fff; }
+        footer { padding: 30px; font-size: 0.7rem; color: #bbb; text-align: center; width: 100%; }
     </style>
 </head>
 <body>
@@ -143,16 +112,16 @@
     </div>
 
     <div class="container">
-        <div class="promo-card" id="promo-card">
-            <i class="fas fa-gift promo-icon"></i>
-            <p class="promo-txt">RESPONDA NOSSA AVALIAÇÃO PARA CONCORRER A UMA</p>
-            <p class="promo-prize">PICANHA P/2 MAIS ACOMPANHAMENTO</p>
+        <div class="promo-card">
+            <p style="font-size: 0.8rem; font-weight: bold; margin-top: 10px;">RESPONDA NOSSA AVALIAÇÃO PARA CONCORRER A UMA</p>
+            <p style="font-size: 1rem; color: var(--deck-wood); font-weight: 900; text-transform: uppercase; margin-bottom: 10px;">PICANHA P/2 MAIS ACOMPANHAMENTO</p>
         </div>
 
-        <div class="card" id="card-principal">
+        <div class="card" data-aos="fade-up">
+            
             <form id="feedback-form" novalidate>
                 
-                <label class="pergunta-label"><i class="fas fa-utensils"></i>O que você achou da Refeição? <span class="balao-erro">PREENCHA ESTE CAMPO</span></label>
+                <label class="pergunta-label"><i class="fas fa-utensils"></i> O que você achou da Refeição? <span class="balao-erro">PREENCHA ESTE CAMPO</span></label>
                 <div class="stars" id="grupo-refeicao">
                     <input type="radio" name="refeicao" id="c5" value="5" required><label for="c5" class="fas fa-star"></label>
                     <input type="radio" name="refeicao" id="c4" value="4"><label for="c4" class="fas fa-star"></label>
@@ -161,7 +130,7 @@
                     <input type="radio" name="refeicao" id="c1" value="1"><label for="c1" class="fas fa-star"></label>
                 </div>
 
-                <label class="pergunta-label"><i class="fas fa-concierge-bell"></i>Nota para o Atendimento: <span class="balao-erro">PREENCHA ESTE CAMPO</span></label>
+                <label class="pergunta-label"><i class="fas fa-concierge-bell"></i> Nota para o Atendimento: <span class="balao-erro">PREENCHA ESTE CAMPO</span></label>
                 <div class="stars" id="grupo-atendimento">
                     <input type="radio" name="atendimento" id="a5" value="5" required><label for="a5" class="fas fa-star"></label>
                     <input type="radio" name="atendimento" id="a4" value="4"><label for="a4" class="fas fa-star"></label>
@@ -170,7 +139,7 @@
                     <input type="radio" name="atendimento" id="a1" value="1"><label for="a1" class="fas fa-star"></label>
                 </div>
 
-                <label class="pergunta-label"><i class="fas fa-thumbs-up"></i>Recomendaria o Deck? <span class="balao-erro">PREENCHA ESTE CAMPO</span></label>
+                <label class="pergunta-label"><i class="fas fa-thumbs-up"></i> Recomendaria o Deck? <span class="balao-erro">PREENCHA ESTE CAMPO</span></label>
                 <div class="stars" id="grupo-recomenda">
                     <input type="radio" name="recomenda" id="r5" value="5" required><label for="r5" class="fas fa-star"></label>
                     <input type="radio" name="recomenda" id="r4" value="4"><label for="r4" class="fas fa-star"></label>
@@ -179,54 +148,46 @@
                     <input type="radio" name="recomenda" id="r1" value="1"><label for="r1" class="fas fa-star"></label>
                 </div>
 
-                <label class="pergunta-label"><i class="fas fa-bullhorn"></i>Como você conheceu o Deck? <span class="balao-erro">PREENCHA ESTE CAMPO</span>
-                    <br><span style="font-weight: normal; font-size: 0.75rem; opacity: 0.8; display: block; margin-top: 3px;">marque uma das opções:</span>
-                </label>
+                <label class="pergunta-label"><i class="fas fa-bullhorn"></i> Como você conheceu o Deck? <span class="balao-erro">PREENCHA ESTE CAMPO</span></label>
                 <div class="opcoes-grid" id="grupo-como-soube">
                     <div class="opcao-item"><input type="radio" name="como_soube" id="opt-insta" value="Instagram" required><label for="opt-insta">Instagram</label></div>
                     <div class="opcao-item"><input type="radio" name="como_soube" id="opt-face" value="Facebook"><label for="opt-face">Facebook</label></div>
                     <div class="opcao-item"><input type="radio" name="como_soube" id="opt-google" value="Google"><label for="opt-google">Google</label></div>
-                    <div class="opcao-item"><input type="radio" name="como_soube" id="opt-amigos" value="Amigos/Familia"><label for="opt-amigos">Amigos/Familia</label></div>
-                    <div class="opcao-item"><input type="radio" name="como_soube" id="opt-passando" value="Passando"><label for="opt-passando" style="font-size: 0.55rem;">Passando em Frente</label></div>
+                    <div class="opcao-item"><input type="radio" name="como_soube" id="opt-amigos" value="Amigos"><label for="opt-amigos">Amigos/Familia</label></div>
+                    <div class="opcao-item"><input type="radio" name="como_soube" id="opt-passando" value="Passando"><label for="opt-passando">Passando</label></div>
                     <div class="opcao-item"><input type="radio" name="como_soube" id="opt-outros" value="Outros"><label for="opt-outros">Outros</label></div>
                 </div>
-
-                <label class="pergunta-label"><i class="fas fa-comment-dots"></i>Alguma sugestão ou elogio?</label>
-                <textarea name="sugestoes" rows="2" placeholder="Sua opinião..."></textarea>
+                
+                <label class="pergunta-label"><i class="fas fa-comment-dots"></i> Sugestões e Elogios:</label>
+                <textarea name="sugestoes" rows="3" placeholder="Sua opinião..."></textarea>
 
                 <hr style="border: 0; border-top: 1px solid rgba(255,255,255,0.1); margin: 20px 0;">
 
                 <div style="position: relative;">
-                    <label class="pergunta-label"><i class="fas fa-user"></i>Seu Nome: <span class="balao-erro">PREENCHA ESTE CAMPO</span></label>
-                    <input type="text" name="nome" placeholder="Digite seu nome" required>
+                    <label class="pergunta-label">Seu Nome: <span class="balao-erro">PREENCHA ESTE CAMPO</span></label>
+                    <input type="text" name="nome" id="input-nome" placeholder="Digite seu Nome" required>
                 </div>
 
                 <div style="position: relative;">
-                    <label class="pergunta-label"><i class="fab fa-whatsapp"></i>Seu WhatsApp: <span class="balao-erro" id="balao-zap">PREENCHA ESTE CAMPO</span></label>
+                    <label class="pergunta-label">Seu WhatsApp: <span class="balao-erro">NÚMERO INCORRETO</span></label>
                     <input type="tel" name="whatsapp" id="input-zap" placeholder="(19) 99999-9999" maxlength="15" required>
                 </div>
 
                 <div style="position: relative;">
-                    <label class="pergunta-label"><i class="fas fa-envelope"></i>Seu E-mail: <span class="balao-erro" id="balao-email">E-MAIL INVÁLIDO</span></label>
+                    <label class="pergunta-label">Seu E-mail: <span class="balao-erro">E-MAIL INVÁLIDO</span></label>
                     <input type="email" name="email" id="input-email" placeholder="seuemail@exemplo.com" required>
                 </div>
 
                 <div style="position: relative;">
-                    <label class="pergunta-label"><i class="fas fa-birthday-cake"></i>Sua Data de Nascimento: <span class="balao-erro">PREENCHA ESTE CAMPO</span></label>
+                    <label class="pergunta-label">Sua Data de Nascimento: <span class="balao-erro">PREENCHA ESTE CAMPO</span></label>
                     <input type="date" name="nascimento" required>
                 </div>
 
                 <div style="position: relative;">
-                    <label class="pergunta-label">Autorização para o envio de Promoções e Novidades: <span class="balao-erro">ESCOLHA UMA OPÇÃO</span></label>
+                    <label class="pergunta-label">Autorização: <span class="balao-erro">ESCOLHA UMA OPÇÃO</span></label>
                     <div class="auth-group" id="grupo-autoriza">
-                        <label class="auth-option">
-                            <input type="radio" name="autoriza_marketing" value="Sim" required>
-                            <span class="auth-text">Autorizo o uso das informações acima para o envio de promoções e novidades.</span>
-                        </label>
-                        <label class="auth-option">
-                            <input type="radio" name="autoriza_marketing" value="Não" required>
-                            <span class="auth-text">Não autorizo o uso das informações acima para o envio de promoções e novidades.</span>
-                        </label>
+                        <label class="auth-option"><input type="radio" name="autoriza_marketing" value="Sim" required><span class="auth-text">Autorizo envio de promoções.</span></label>
+                        <label class="auth-option"><input type="radio" name="autoriza_marketing" value="Não" required><span class="auth-text">Não autorizo envio.</span></label>
                     </div>
                 </div>
 
@@ -236,16 +197,13 @@
             <div id="sucesso">
                 <i class="fas fa-check-circle check-icon"></i>
                 <h2 style="color: var(--deck-wood); margin-bottom: 10px;">OBRIGADO, <span id="span-nome"></span>!</h2>
-                <p id="msg-agradecimento" style="line-height: 1.5; font-size: 1rem; color: #eee;"></p>
+                <p>Sua avaliação foi enviada com sucesso!</p>
                 <button onclick="location.reload()" style="background:none; border:2px solid var(--deck-wood); color:#fff; padding:10px 20px; border-radius:10px; margin-top:25px; cursor:pointer; font-weight: bold;">NOVA AVALIAÇÃO</button>
             </div>
         </div>
     </div>
 
-    <footer>
-        Desenvolvido por <strong>Gabriel Piovesan</strong><br>
-        © 2026 Deck Churrascaria | Todos os Direitos Reservados.
-    </footer>
+    <footer> Desenvolvido por <strong>Gabriel Piovesan</strong><br>© 2026 Deck Churrascaria </footer>
 
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>
@@ -254,69 +212,57 @@
         const btn = document.getElementById('btn-submit');
         const inputZap = document.getElementById('input-zap');
 
-        function limparErrosGlobal() {
-            document.querySelectorAll('.balao-erro').forEach(balao => {
-                balao.style.display = 'none';
-            });
-        }
-
-        f.addEventListener('input', limparErrosGlobal);
-        f.addEventListener('change', limparErrosGlobal);
-
         inputZap.addEventListener('input', (e) => {
-            let value = e.target.value.replace(/\D/g, "");
-            if (value.length > 11) value = value.slice(0, 11);
-            if (value.length > 10) e.target.value = value.replace(/^(\d{2})(\d{5})(\d{4})$/, "($1) $2-$3");
-            else if (value.length > 6) e.target.value = value.replace(/^(\d{2})(\d{4})(\d{0,4})$/, "($1) $2-$3");
-            else if (value.length > 2) e.target.value = value.replace(/^(\d{2})(\d{0,5})$/, "($1) $2");
-            else e.target.value = value.replace(/^(\d*)$/, "($1");
+            let v = e.target.value.replace(/\D/g, "");
+            if (v.length > 11) v = v.slice(0, 11);
+            if (v.length > 10) e.target.value = v.replace(/^(\d{2})(\d{5})(\d{4})$/, "($1) $2-$3");
+            else if (v.length > 6) e.target.value = v.replace(/^(\d{2})(\d{4})(\d{0,4})$/, "($1) $2-$3");
+            else if (v.length > 2) e.target.value = v.replace(/^(\d{2})(\d{0,5})$/, "($1) $2");
+            else e.target.value = v.replace(/^(\d*)$/, "($1");
         });
 
         const scriptURL = 'COLOQUE_AQUI_O_LINK_DO_SCRIPT_DA_PLANILHA_DO_DECK';
 
         f.onsubmit = (e) => {
             e.preventDefault();
-            limparErrosGlobal();
-            let erros = [];
             
-            const gruposRadio = ['refeicao', 'atendimento', 'recomenda', 'como_soube', 'autoriza_marketing'];
-            gruposRadio.forEach(nome => {
-                const selecionado = f.querySelector(`input[name="${nome}"]:checked`);
-                if (!selecionado) {
-                    let container = document.getElementById(nome === 'como_soube' ? 'grupo-como-soube' : nome === 'autoriza_marketing' ? 'grupo-autoriza' : `grupo-${nome}`);
+            // Limpa balões antigos antes de validar de novo
+            document.querySelectorAll('.balao-erro').forEach(el => el.style.display = 'none');
+            
+            let erros = [];
+            const cleanZap = inputZap.value.replace(/\D/g, "");
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+            // 1. Validação de Rádios (Estrelas, Origem e Autorização)
+            const radioGroups = ['refeicao', 'atendimento', 'recomenda', 'como_soube', 'autoriza_marketing'];
+            radioGroups.forEach(name => {
+                if(!f.querySelector(`input[name="${name}"]:checked`)) {
+                    let container = document.getElementById(name === 'como_soube' ? 'grupo-como-soube' : name === 'autoriza_marketing' ? 'grupo-autoriza' : `grupo-${name}`);
                     let balao = container.previousElementSibling.querySelector('.balao-erro');
-                    if(balao) {
-                        balao.style.display = 'block';
-                        erros.push(balao);
-                    }
+                    balao.style.display = 'block';
+                    erros.push(balao);
                 }
             });
 
-            const inputsTexto = f.querySelectorAll('input[required]:not([type="radio"])');
-            inputsTexto.forEach(input => {
+            // 2. Validação de Campos de Texto, Zap e E-mail
+            f.querySelectorAll('input[required]:not([type="radio"])').forEach(input => {
                 let balao = input.previousElementSibling.querySelector('.balao-erro');
-                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-                
                 if (!input.value.trim()) {
                     balao.innerText = "PREENCHA ESTE CAMPO";
                     balao.style.display = 'block';
                     erros.push(balao);
-                } 
-                else if (input.id === 'input-zap') {
-                    const cleanZap = input.value.replace(/\D/g, "");
-                    if (cleanZap.length < 11) {
-                        balao.innerText = "NÚMERO INCORRETO";
-                        balao.style.display = 'block';
-                        erros.push(balao);
-                    }
-                }
-                else if (input.type === 'email' && !emailRegex.test(input.value)) {
+                } else if (input.id === 'input-zap' && cleanZap.length < 11) {
+                    balao.innerText = "NÚMERO INCORRETO";
+                    balao.style.display = 'block';
+                    erros.push(balao);
+                } else if (input.type === 'email' && !emailRegex.test(input.value)) {
                     balao.innerText = "E-MAIL INVÁLIDO";
                     balao.style.display = 'block';
                     erros.push(balao);
                 }
             });
 
+            // Lógica de Scroll: Leva a pessoa até o primeiro erro encontrado
             if (erros.length > 0) {
                 erros[0].scrollIntoView({ behavior: 'smooth', block: 'center' });
                 return;
@@ -324,19 +270,17 @@
 
             btn.innerText = "ENVIANDO...";
             btn.disabled = true;
-            const nomeUsuario = f.nome.value.split(' ')[0].toUpperCase();
+            const nomeUsuario = document.getElementById('input-nome').value.split(' ')[0].toUpperCase();
 
             fetch(scriptURL, { method: 'POST', body: new FormData(f) })
-                .then(response => {
-                    document.getElementById('promo-card').style.display = 'none';
+                .then(() => {
                     document.getElementById('titles').style.display = 'none';
                     document.getElementById('span-nome').innerText = nomeUsuario;
-                    document.getElementById('msg-agradecimento').innerText = "Sua avaliação foi enviada com sucesso! Agora você está participando do sorteio de uma picanha P/2 pessoas. Caso você seja sorteado, entraremos em contato por WhatsApp. Boa sorte!";
                     f.style.display = 'none';
                     document.getElementById('sucesso').style.display = 'block';
-                    window.scrollTo(0, 0);
+                    window.scrollTo(0,0);
                 })
-                .catch(error => {
+                .catch(() => {
                     btn.innerText = "ERRO! TENTE NOVAMENTE.";
                     btn.disabled = false;
                 });
