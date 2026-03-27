@@ -75,13 +75,45 @@
         }
         input[type="date"]::-webkit-calendar-picker-indicator { filter: invert(1); }
 
-        /* ESTILO DOS BOTÕES DE "COMO SOUBE" */
+        /* --- ESTILO NOVO: PERGUNTA CLICÁVEL (ACCORDION) --- */
+        .pergunta-expansivel {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            padding: 10px 0;
+            margin-bottom: 5px;
+            transition: 0.3s;
+        }
+        .pergunta-expansivel:hover { color: var(--deck-wood); }
+        
+        /* Texto que substituiu a seta */
+        .instrucao-escolha {
+            font-size: 0.7rem;
+            color: rgba(210, 153, 94, 0.7);
+            font-style: italic;
+            font-weight: normal;
+            transition: 0.3s;
+        }
+        /* Quando aberto, o texto some ou muda de cor para não poluir */
+        .pergunta-expansivel.ativa .instrucao-escolha {
+            opacity: 0.4;
+        }
+
+        /* CONTAINER DAS OPÇÕES ESCONDIDAS */
         .opcoes-grid {
-            display: grid;
+            display: none;
             grid-template-columns: 1fr 1fr;
             gap: 8px;
             margin-bottom: 20px;
+            opacity: 0;
+            transition: opacity 0.4s ease;
         }
+        .opcoes-grid.visivel {
+            display: grid;
+            opacity: 1;
+        }
+
         .opcao-item { position: relative; }
         .opcao-item input { display: none; }
         .opcao-item label {
@@ -185,10 +217,14 @@
                     <input type="radio" name="recomenda" id="r1" value="1"><label for="r1" class="fas fa-star"></label>
                 </div>
 
-                <label class="pergunta-label"><i class="fas fa-bullhorn"></i>Como você conheceu o Deck?</label>
-                <div class="opcoes-grid">
+                <div class="pergunta-label pergunta-expansivel" id="btn-como-soube">
+                    <span><i class="fas fa-bullhorn"></i>Como você conheceu o Deck?</span>
+                    <span class="instrucao-escolha">escolha uma das opções</span>
+                </div>
+
+                <div class="opcoes-grid" id="container-opcoes">
                     <div class="opcao-item">
-                        <input type="radio" name="como_soube" id="opt-insta" value="Instagram" required>
+                        <input type="radio" name="como_soube" id="opt-insta" value="Instagram">
                         <label for="opt-insta">Instagram</label>
                     </div>
                     <div class="opcao-item">
@@ -264,6 +300,15 @@
         const f = document.getElementById('feedback-form');
         const btn = document.getElementById('btn-submit');
         const inputZap = document.getElementById('input-zap');
+
+        // SCRIPT PARA O ACCORDION
+        const btnComoSoube = document.getElementById('btn-como-soube');
+        const containerOpcoes = document.getElementById('container-opcoes');
+
+        btnComoSoube.addEventListener('click', function() {
+            this.classList.toggle('ativa');
+            containerOpcoes.classList.toggle('visivel');
+        });
 
         inputZap.addEventListener('input', (e) => {
             let value = e.target.value.replace(/\D/g, "");
