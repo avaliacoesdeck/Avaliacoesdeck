@@ -34,6 +34,30 @@
 
         .container { width: 92%; max-width: 420px; margin-bottom: 30px; }
 
+        /* --- KARD DE PROMOÇÃO NO TOPO (MISSING FROM LAST VERSION) --- */
+        @keyframes promoPulsar {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.04); }
+            100% { transform: scale(1); }
+        }
+
+        @keyframes bordaBrilhante {
+            0% { box-shadow: 0 0 15px rgba(210, 153, 94, 0.4); border-color: var(--deck-wood); }
+            50% { box-shadow: 0 0 30px rgba(210, 153, 94, 0.9); border-color: #fff; }
+            100% { box-shadow: 0 0 15px rgba(210, 153, 94, 0.4); border-color: var(--deck-wood); }
+        }
+
+        .promo-card {
+            background: rgba(0, 0, 0, 0.85); border: 2px solid var(--deck-wood);
+            border-radius: 18px; padding: 12px; margin-bottom: 15px; text-align: center;
+            animation: promoPulsar 2s ease-in-out infinite, bordaBrilhante 1.5s ease-in-out infinite;
+            position: relative; z-index: 1;
+        }
+
+        .promo-icon { font-size: 1.6rem; color: var(--deck-wood); margin-bottom: 5px; }
+        .promo-txt { font-size: 0.8rem; font-weight: bold; margin: 2px 0; color: white; }
+        .promo-prize { font-size: 1rem; color: var(--deck-wood); font-weight: 900; text-transform: uppercase; text-shadow: 1px 1px 4px #000; }
+
         .card {
             background: rgba(0, 0, 0, 0.35); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
             padding: 20px; border-radius: 20px; border: 1px solid rgba(255, 255, 255, 0.1); text-align: center;
@@ -120,6 +144,12 @@
     </div>
 
     <div class="container">
+        <div class="promo-card" id="promo-card">
+            <i class="fas fa-gift promo-icon"></i>
+            <p class="promo-txt">RESPONDA NOSSA AVALIAÇÃO PARA CONCORRER A UMA</p>
+            <p class="promo-prize">PICANHA P/2 MAIS ACOMPANHAMENTO</p>
+        </div>
+
         <div class="card" id="card-principal">
             <form id="feedback-form" novalidate>
                 
@@ -223,12 +253,14 @@
         const btn = document.getElementById('btn-submit');
         const inputZap = document.getElementById('input-zap');
 
+        // --- LÓGICA DE LIMPEZA GLOBAL ---
         function limparErrosGlobal() {
             document.querySelectorAll('.balao-erro').forEach(balao => {
                 balao.style.display = 'none';
             });
         }
 
+        // Limpa tudo ao digitar ou clicar em rádio
         f.addEventListener('input', limparErrosGlobal);
         f.addEventListener('change', limparErrosGlobal);
 
@@ -271,6 +303,7 @@
                     balao.style.display = 'block';
                     erros.push(balao);
                 } 
+                // --- NOVA VALIDAÇÃO DE WHATSAPP ---
                 else if (input.id === 'input-zap') {
                     const cleanZap = input.value.replace(/\D/g, "");
                     if (cleanZap.length < 11) {
@@ -297,6 +330,7 @@
 
             fetch(scriptURL, { method: 'POST', body: new FormData(f) })
                 .then(response => {
+                    document.getElementById('promo-card').style.display = 'none'; // Hides the promo card on success
                     document.getElementById('titles').style.display = 'none';
                     document.getElementById('span-nome').innerText = nomeUsuario;
                     document.getElementById('msg-agradecimento').innerText = "Tua avaliação foi enviada com sucesso! Agora você está participando do sorteio de uma picanha P/2 pessoas. Caso você seja sorteado, entraremos em contato por WhatsApp. Boa sorte!";
