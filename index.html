@@ -157,7 +157,7 @@
                     <div class="opcao-item"><input type="radio" name="como_soube" id="opt-google" value="Google"><label for="opt-google">Google</label></div>
                     <div class="opcao-item"><input type="radio" name="como_soube" id="opt-amigos" value="Amigos/Familia"><label for="opt-amigos">Amigos/Familia</label></div>
                     <div class="opcao-item"><input type="radio" name="como_soube" id="opt-passando" value="Passando"><label for="opt-passando" style="font-size: 0.55rem;">Passando em Frente</label></div>
-  <div class="opcao-item"><input type="radio" name="como_soube" id="opt-outros" value="Outros"><label for="opt-outros">Outros</label></div>
+                    <div class="opcao-item"><input type="radio" name="como_soube" id="opt-outros" value="Outros"><label for="opt-outros">Outros</label></div>
                 </div>
 
                 <label class="pergunta-label"><i class="fas fa-comment-dots"></i>Alguma sugestão ou elogio?</label>
@@ -171,7 +171,7 @@
                 </div>
 
                 <div style="position: relative;">
-                    <label class="pergunta-label"><i class="fab fa-whatsapp"></i>Seu WhatsApp: <span class="balao-erro">PREENCHA ESTE CAMPO</span></label>
+                    <label class="pergunta-label"><i class="fab fa-whatsapp"></i>Seu WhatsApp: <span class="balao-erro" id="balao-zap">PREENCHA ESTE CAMPO</span></label>
                     <input type="tel" name="whatsapp" id="input-zap" placeholder="(19) 99999-9999" maxlength="15" required>
                 </div>
 
@@ -186,7 +186,7 @@
                 </div>
 
                 <div style="position: relative;">
-                    <label class="pergunta-label">Autorização para envio de Promoções e Novidades: <span class="balao-erro">ESCOLHA UMA OPÇÃO</span></label>
+                    <label class="pergunta-label">Autorização para o envio de Promoções e Novidades: <span class="balao-erro">ESCOLHA UMA OPÇÃO</span></label>
                     <div class="auth-group" id="grupo-autoriza">
                         <label class="auth-option">
                             <input type="radio" name="autoriza_marketing" value="Sim" required>
@@ -270,7 +270,17 @@
                     balao.innerText = "PREENCHA ESTE CAMPO";
                     balao.style.display = 'block';
                     erros.push(balao);
-                } else if (input.type === 'email' && !emailRegex.test(input.value)) {
+                } 
+                // --- NOVA VALIDAÇÃO DE WHATSAPP ---
+                else if (input.id === 'input-zap') {
+                    const cleanZap = input.value.replace(/\D/g, "");
+                    if (cleanZap.length < 11) {
+                        balao.innerText = "NÚMERO INCORRETO";
+                        balao.style.display = 'block';
+                        erros.push(balao);
+                    }
+                }
+                else if (input.type === 'email' && !emailRegex.test(input.value)) {
                     balao.innerText = "E-MAIL INVÁLIDO";
                     balao.style.display = 'block';
                     erros.push(balao);
