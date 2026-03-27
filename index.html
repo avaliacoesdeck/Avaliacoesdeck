@@ -75,86 +75,33 @@
         }
         input[type="date"]::-webkit-calendar-picker-indicator { filter: invert(1); }
 
-        /* --- ESTILO DA PERGUNTA CLICÁVEL --- */
-        .pergunta-expansivel {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            cursor: pointer;
-            padding: 10px 0;
-            margin-bottom: 5px;
-            transition: 0.3s;
-        }
-        .pergunta-expansivel:hover { color: var(--deck-wood); }
-        
-        /* Texto instrução - AGORA EM BRANCO */
-        .instrucao-escolha {
-            font-size: 0.7rem;
-            color: #ffffff; /* Mudado para branco puro */
-            font-style: italic;
-            font-weight: normal;
-            opacity: 0.8; /* Leve transparência para não brilhar mais que a pergunta */
-            transition: 0.3s;
-        }
-        
-        .pergunta-expansivel.ativa .instrucao-escolha {
-            opacity: 0.3;
-        }
-
-        /* CONTAINER DAS OPÇÕES ESCONDIDAS */
+        /* GRID COMPACTO DE 3 COLUNAS */
         .opcoes-grid {
-            display: none;
-            grid-template-columns: 1fr 1fr;
-            gap: 8px;
-            margin-bottom: 20px;
-            opacity: 0;
-            transition: opacity 0.4s ease;
-        }
-        .opcoes-grid.visivel {
             display: grid;
-            opacity: 1;
+            grid-template-columns: 1fr 1fr 1fr; /* Três colunas iguais */
+            gap: 6px;
+            margin-bottom: 20px;
         }
-
-        .opcao-item { position: relative; }
         .opcao-item input { display: none; }
         .opcao-item label {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            padding: 10px 5px;
-            border-radius: 8px;
-            font-size: 0.75rem;
-            cursor: pointer;
-            transition: 0.3s;
-            height: 100%;
-            text-align: center;
+            display: flex; align-items: center; justify-content: center;
+            background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 8px 2px; border-radius: 6px; font-size: 0.65rem; cursor: pointer; transition: 0.2s;
+            height: 100%; text-align: center; text-transform: uppercase;
         }
         .opcao-item input:checked + label {
-            background: rgba(210, 153, 94, 0.2);
-            border-color: var(--deck-wood);
-            color: var(--deck-wood);
-            font-weight: bold;
+            background: rgba(210, 153, 94, 0.2); border-color: var(--deck-wood); color: var(--deck-wood); font-weight: bold;
         }
 
-        /* ESTILO DAS OPÇÕES DE AUTORIZAÇÃO */
+        /* ESTILO AUTORIZAÇÃO */
         .auth-group { margin-top: 15px; text-align: left; }
         .auth-option {
-            display: flex;
-            align-items: center;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            padding: 12px;
-            border-radius: 10px;
-            margin-bottom: 8px;
-            cursor: pointer;
-            transition: 0.3s;
+            display: flex; align-items: center; background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1); padding: 12px; border-radius: 10px;
+            margin-bottom: 8px; cursor: pointer; transition: 0.3s;
         }
-        .auth-option input[type="radio"] {
-            width: 18px; height: 18px; margin-right: 12px; margin-bottom: 0; accent-color: var(--deck-wood); flex-shrink: 0;
-        }
-        .auth-text { font-size: 0.75rem; line-height: 1.3; color: #ddd; }
+        .auth-option input[type="radio"] { width: 18px; height: 18px; margin-right: 12px; margin-bottom: 0; accent-color: var(--deck-wood); }
+        .auth-text { font-size: 0.75rem; color: #ddd; }
         .auth-option:has(input:checked) { background: rgba(210, 153, 94, 0.15); border-color: var(--deck-wood); }
 
         .btn-enviar {
@@ -180,7 +127,6 @@
     </div>
 
     <div class="container">
-        
         <div class="promo-card" id="promo-card">
             <i class="fas fa-gift promo-icon"></i>
             <p class="promo-txt">RESPONDA NOSSA AVALIAÇÃO PARA CONCORRER A UMA</p>
@@ -188,7 +134,6 @@
         </div>
 
         <div class="card" id="card-principal">
-            
             <form id="feedback-form">
                 
                 <label class="pergunta-label"><i class="fas fa-utensils"></i>O que você achou da Refeição?</label>
@@ -218,14 +163,10 @@
                     <input type="radio" name="recomenda" id="r1" value="1"><label for="r1" class="fas fa-star"></label>
                 </div>
 
-                <div class="pergunta-label pergunta-expansivel" id="btn-como-soube">
-                    <span><i class="fas fa-bullhorn"></i>Como você conheceu o Deck?</span>
-                    <span class="instrucao-escolha">escolha uma das opções</span>
-                </div>
-
-                <div class="opcoes-grid" id="container-opcoes">
+                <label class="pergunta-label"><i class="fas fa-bullhorn"></i>Como você conheceu o Deck?</label>
+                <div class="opcoes-grid">
                     <div class="opcao-item">
-                        <input type="radio" name="como_soube" id="opt-insta" value="Instagram">
+                        <input type="radio" name="como_soube" id="opt-insta" value="Instagram" required>
                         <label for="opt-insta">Instagram</label>
                     </div>
                     <div class="opcao-item">
@@ -234,15 +175,15 @@
                     </div>
                     <div class="opcao-item">
                         <input type="radio" name="como_soube" id="opt-google" value="Google">
-                        <label for="opt-google">pesquisando no Google</label>
+                        <label for="opt-google">Google</label>
                     </div>
                     <div class="opcao-item">
                         <input type="radio" name="como_soube" id="opt-amigos" value="Amigos">
-                        <label for="opt-amigos">Amigos / Família</label>
+                        <label for="opt-amigos">Amigos</label>
                     </div>
                     <div class="opcao-item">
                         <input type="radio" name="como_soube" id="opt-passando" value="Passando">
-                        <label for="opt-passando">Vi ao passar na frente</label>
+                        <label for="opt-passando">Passando</label>
                     </div>
                     <div class="opcao-item">
                         <input type="radio" name="como_soube" id="opt-outros" value="Outros">
@@ -301,14 +242,6 @@
         const f = document.getElementById('feedback-form');
         const btn = document.getElementById('btn-submit');
         const inputZap = document.getElementById('input-zap');
-
-        const btnComoSoube = document.getElementById('btn-como-soube');
-        const containerOpcoes = document.getElementById('container-opcoes');
-
-        btnComoSoube.addEventListener('click', function() {
-            this.classList.toggle('ativa');
-            containerOpcoes.classList.toggle('visivel');
-        });
 
         inputZap.addEventListener('input', (e) => {
             let value = e.target.value.replace(/\D/g, "");
