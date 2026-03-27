@@ -205,7 +205,7 @@
             <div id="sucesso">
                 <i class="fas fa-check-circle check-icon"></i>
                 <h2 style="color: var(--deck-wood); margin-bottom: 10px;">OBRIGADO, <span id="span-nome"></span>!</h2>
-                <p id="msg-agradecimento"></p>
+                <p id="msg-agradecimento" style="line-height: 1.5; font-size: 1rem; color: #eee;"></p>
                 <button onclick="location.reload()" style="background:none; border:2px solid var(--deck-wood); color:#fff; padding:10px 20px; border-radius:10px; margin-top:25px; cursor:pointer; font-weight: bold;">NOVA AVALIAÇÃO</button>
             </div>
         </div>
@@ -271,7 +271,6 @@
                     balao.style.display = 'block';
                     erros.push(balao);
                 } 
-                // --- NOVA VALIDAÇÃO DE WHATSAPP ---
                 else if (input.id === 'input-zap') {
                     const cleanZap = input.value.replace(/\D/g, "");
                     if (cleanZap.length < 11) {
@@ -300,7 +299,7 @@
                 .then(response => {
                     document.getElementById('titles').style.display = 'none';
                     document.getElementById('span-nome').innerText = nomeUsuario;
-                    document.getElementById('msg-agradecimento').innerText = "Sua avaliação foi enviada com sucesso! Boa sorte no sorteio!";
+                    document.getElementById('msg-agradecimento').innerText = "Tua avaliação foi enviada com sucesso! Agora você está participando do sorteio de uma picanha P/2 pessoas. Caso você seja sorteado, entraremos em contato por WhatsApp. Boa sorte!";
                     f.style.display = 'none';
                     document.getElementById('sucesso').style.display = 'block';
                     window.scrollTo(0, 0);
