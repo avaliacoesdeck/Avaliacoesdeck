@@ -50,7 +50,6 @@
         .pergunta-label { display: block; text-align: left; margin: 15px 0 10px; font-weight: bold; font-size: 0.85rem; color: #fff; text-shadow: 1px 1px 3px #000; position: relative; }
         .pergunta-label i { color: var(--deck-wood); margin-right: 8px; font-size: 0.9rem; }
 
-        /* --- BALÃO DE ERRO (SISTEMA BONITO) --- */
         .balao-erro {
             position: absolute; bottom: 115%; left: 0; 
             background: rgba(255, 255, 255, 0.1); 
@@ -153,7 +152,7 @@
                     <div class="opcao-item"><input type="radio" name="como_soube" id="opt-insta" value="Instagram" required><label for="opt-insta">Instagram</label></div>
                     <div class="opcao-item"><input type="radio" name="como_soube" id="opt-face" value="Facebook"><label for="opt-face">Facebook</label></div>
                     <div class="opcao-item"><input type="radio" name="como_soube" id="opt-google" value="Google"><label for="opt-google">Google</label></div>
-                    <div class="opcao-item"><input type="radio" name="como_soube" id="opt-amigos" value="Amigos"><label for="opt-amigos">Amigos/Familia</label></div>
+                    <div class="opcao-item"><input type="radio" name="como_soube" id="opt-amigos" value="Amigos/Familia"><label for="opt-amigos">Amigos/Familia</label></div>
                     <div class="opcao-item"><input type="radio" name="como_soube" id="opt-passando" value="Passando"><label for="opt-passando">Passando</label></div>
                     <div class="opcao-item"><input type="radio" name="como_soube" id="opt-outros" value="Outros"><label for="opt-outros">Outros</label></div>
                 </div>
@@ -184,10 +183,16 @@
                 </div>
 
                 <div style="position: relative;">
-                    <label class="pergunta-label">Autorização: <span class="balao-erro">ESCOLHA UMA OPÇÃO</span></label>
+                    <label class="pergunta-label">Autorização para o envio de Promoções e Novidades: <span class="balao-erro">ESCOLHA UMA OPÇÃO</span></label>
                     <div class="auth-group" id="grupo-autoriza">
-                        <label class="auth-option"><input type="radio" name="autoriza_marketing" value="Sim" required><span class="auth-text">Autorizo envio de promoções.</span></label>
-                        <label class="auth-option"><input type="radio" name="autoriza_marketing" value="Não" required><span class="auth-text">Não autorizo envio.</span></label>
+                        <label class="auth-option">
+                            <input type="radio" name="autoriza_marketing" value="Sim" required>
+                            <span class="auth-text">Autorizo o uso das informações acima para o envio de promoções e novidades.</span>
+                        </label>
+                        <label class="auth-option">
+                            <input type="radio" name="autoriza_marketing" value="Não" required>
+                            <span class="auth-text">Não autorizo o uso das informações acima para o envio de promoções e novidades.</span>
+                        </label>
                     </div>
                 </div>
 
@@ -225,65 +230,77 @@
 
         f.onsubmit = (e) => {
             e.preventDefault();
-            
-            // Limpa balões antigos antes de validar de novo
             document.querySelectorAll('.balao-erro').forEach(el => el.style.display = 'none');
             
-            let erros = [];
             const cleanZap = inputZap.value.replace(/\D/g, "");
             const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-            // 1. Validação de Rádios (Estrelas, Origem e Autorização)
-            const radioGroups = ['refeicao', 'atendimento', 'recomenda', 'como_soube', 'autoriza_marketing'];
-            radioGroups.forEach(name => {
+            // Validação de Radios (Um por um)
+            const radioGroups = ['refeicao', 'atendimento', 'recomenda', 'como_soube'];
+            for (let name of radioGroups) {
                 if(!f.querySelector(`input[name="${name}"]:checked`)) {
-                    let container = document.getElementById(name === 'como_soube' ? 'grupo-como-soube' : name === 'autoriza_marketing' ? 'grupo-autoriza' : `grupo-${name}`);
+                    let container = document.getElementById(name === 'como_soube' ? 'grupo-como-soube' : `grupo-${name}`);
                     let balao = container.previousElementSibling.querySelector('.balao-erro');
                     balao.style.display = 'block';
-                    erros.push(balao);
+                    balao.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    return;
                 }
-            });
+            }
 
-            // 2. Validação de Campos de Texto, Zap e E-mail
-            f.querySelectorAll('input[required]:not([type="radio"])').forEach(input => {
-                let balao = input.previousElementSibling.querySelector('.balao-erro');
-                if (!input.value.trim()) {
+            // Campos de Texto, Zap, Email e Data
+            const inputs = [
+                { id: 'input-nome', field: f.nome },
+                { id: 'input-zap', field: inputZap },
+                { id: 'input-email', field: f.email },
+                { id: 'date', field: f.nascimento },
+                { id: 'marketing', field: 'autoriza_marketing' }
+            ];
+
+            for (let item of inputs) {
+                let balao;
+                if (item.id === 'marketing') {
+                    if(!f.querySelector(`input[name="autoriza_marketing"]:checked`)) {
+                        balao = document.getElementById('grupo-autoriza').previousElementSibling.querySelector('.balao-erro');
+                        balao.style.display = 'block';
+                        balao.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        return;
+                    }
+                    continue;
+                }
+
+                balao = item.field.previousElementSibling.querySelector('.balao-erro');
+                const valor = item.field.value.trim();
+
+                if (!valor) {
                     balao.innerText = "PREENCHA ESTE CAMPO";
                     balao.style.display = 'block';
-                    erros.push(balao);
-                } else if (input.id === 'input-zap' && cleanZap.length < 11) {
+                    balao.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    return;
+                }
+                if (item.id === 'input-zap' && cleanZap.length < 11) {
                     balao.innerText = "NÚMERO INCORRETO";
                     balao.style.display = 'block';
-                    erros.push(balao);
-                } else if (input.type === 'email' && !emailRegex.test(input.value)) {
+                    balao.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    return;
+                }
+                if (item.field.type === 'email' && !emailRegex.test(valor)) {
                     balao.innerText = "E-MAIL INVÁLIDO";
                     balao.style.display = 'block';
-                    erros.push(balao);
+                    balao.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    return;
                 }
-            });
-
-            // Lógica de Scroll: Leva a pessoa até o primeiro erro encontrado
-            if (erros.length > 0) {
-                erros[0].scrollIntoView({ behavior: 'smooth', block: 'center' });
-                return;
             }
 
             btn.innerText = "ENVIANDO...";
             btn.disabled = true;
-            const nomeUsuario = document.getElementById('input-nome').value.split(' ')[0].toUpperCase();
-
             fetch(scriptURL, { method: 'POST', body: new FormData(f) })
                 .then(() => {
                     document.getElementById('titles').style.display = 'none';
-                    document.getElementById('span-nome').innerText = nomeUsuario;
+                    document.getElementById('span-nome').innerText = f.nome.value.split(' ')[0].toUpperCase();
                     f.style.display = 'none';
                     document.getElementById('sucesso').style.display = 'block';
                     window.scrollTo(0,0);
-                })
-                .catch(() => {
-                    btn.innerText = "ERRO! TENTE NOVAMENTE.";
-                    btn.disabled = false;
-                });
+                }).catch(() => { btn.innerText = "ERRO!"; btn.disabled = false; });
         };
     </script>
 </body>
