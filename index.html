@@ -34,13 +34,6 @@
 
         .container { width: 92%; max-width: 420px; margin-bottom: 30px; }
 
-        .promo-card {
-            background: rgba(0, 0, 0, 0.85); border: 2px solid var(--deck-wood);
-            border-radius: 18px; padding: 12px; margin-bottom: 15px; text-align: center;
-            animation: promoPulsar 2s ease-in-out infinite;
-        }
-        @keyframes promoPulsar { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.03); } }
-
         .card {
             background: rgba(0, 0, 0, 0.35); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
             padding: 25px; border-radius: 25px; border: 1px solid rgba(255, 255, 255, 0.1); text-align: center;
@@ -96,7 +89,8 @@
         #sucesso { display: none; padding: 40px 10px; }
         .check-icon { font-size: 4rem; color: #2ecc71; margin-bottom: 15px; }
 
-        footer { padding: 30px; font-size: 0.7rem; color: #bbb; text-align: center; width: 100%; }
+        footer { padding: 25px 15px; font-size: 0.7rem; color: #bbb; text-align: center; width: 100%; }
+        footer strong { color: #fff; }
     </style>
 </head>
 <body>
@@ -111,11 +105,6 @@
     </div>
 
     <div class="container">
-        <div class="promo-card">
-            <p style="font-size: 0.8rem; font-weight: bold; margin-top: 10px;">RESPONDA NOSSA AVALIAÇÃO PARA CONCORRER A UMA</p>
-            <p style="font-size: 1rem; color: var(--deck-wood); font-weight: 900; text-transform: uppercase; margin-bottom: 10px;">PICANHA P/2 MAIS ACOMPANHAMENTO</p>
-        </div>
-
         <div class="card" data-aos="fade-up">
             
             <form id="feedback-form" novalidate>
@@ -153,7 +142,7 @@
                     <div class="opcao-item"><input type="radio" name="como_soube" id="opt-face" value="Facebook"><label for="opt-face">Facebook</label></div>
                     <div class="opcao-item"><input type="radio" name="como_soube" id="opt-google" value="Google"><label for="opt-google">Google</label></div>
                     <div class="opcao-item"><input type="radio" name="como_soube" id="opt-amigos" value="Amigos/Familia"><label for="opt-amigos">Amigos/Familia</label></div>
-                    <div class="opcao-item"><input type="radio" name="como_soube" id="opt-passando" value="Passando"><label for="opt-passando">Passando</label></div>
+                    <div class="opcao-item"><input type="radio" name="como_soube" id="opt-passando" value="Passando"><label for="opt-passando" style="font-size: 0.55rem;">Passando em Frente</label></div>
                     <div class="opcao-item"><input type="radio" name="como_soube" id="opt-outros" value="Outros"><label for="opt-outros">Outros</label></div>
                 </div>
                 
@@ -208,7 +197,10 @@
         </div>
     </div>
 
-    <footer> Desenvolvido por <strong>Gabriel Piovesan</strong><br>© 2026 Deck Churrascaria </footer>
+    <footer>
+        Desenvolvido por <strong>Gabriel Piovesan</strong><br>
+        © 2026 Deck Churrascaria | Todos os Direitos Reservados.
+    </footer>
 
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>
@@ -216,6 +208,19 @@
         const f = document.getElementById('feedback-form');
         const btn = document.getElementById('btn-submit');
         const inputZap = document.getElementById('input-zap');
+
+        // FUNÇÃO PARA ESCONDER BALÃO AO CORRIGIR
+        f.addEventListener('input', (e) => {
+            let target = e.target;
+            let balao;
+            if (target.type === 'radio') {
+                let container = target.closest('.stars, .opcoes-grid, .auth-group');
+                balao = container.previousElementSibling.querySelector('.balao-erro');
+            } else {
+                balao = target.previousElementSibling?.querySelector('.balao-erro');
+            }
+            if (balao) balao.style.display = 'none';
+        });
 
         inputZap.addEventListener('input', (e) => {
             let v = e.target.value.replace(/\D/g, "");
@@ -235,7 +240,6 @@
             const cleanZap = inputZap.value.replace(/\D/g, "");
             const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-            // Validação de Radios (Um por um)
             const radioGroups = ['refeicao', 'atendimento', 'recomenda', 'como_soube'];
             for (let name of radioGroups) {
                 if(!f.querySelector(`input[name="${name}"]:checked`)) {
@@ -247,7 +251,6 @@
                 }
             }
 
-            // Campos de Texto, Zap, Email e Data
             const inputs = [
                 { id: 'input-nome', field: f.nome },
                 { id: 'input-zap', field: inputZap },
