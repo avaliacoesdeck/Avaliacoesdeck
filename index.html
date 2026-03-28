@@ -234,6 +234,7 @@
             else e.target.value = v.replace(/^(\d*)$/, "($1");
         });
 
+        // URL DO SCRIPT
         const scriptURL = 'https://script.google.com/macros/s/AKfycbw0kKVol2sjUI2oXhv28n62slRX5vFAhIBhIMdj6pAYCweBVrYhZMFSkQ9IB4-Tp2VumA/exec';
 
         f.onsubmit = (e) => {
@@ -243,11 +244,10 @@
             const cleanZap = inputZap.value.replace(/\D/g, "");
             const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-            // AQUI FOI ALTERADO: como_soube para comoConheceu
+            // ALTERADO: nome do rádio para comoConheceu
             const radioGroups = ['refeicao', 'atendimento', 'recomenda', 'comoConheceu'];
             for (let name of radioGroups) {
                 if(!f.querySelector(`input[name="${name}"]:checked`)) {
-                    // Ajuste no seletor do container
                     let container = document.getElementById(name === 'comoConheceu' ? 'grupo-como-soube' : `grupo-${name}`);
                     let balao = container.previousElementSibling.querySelector('.balao-erro');
                     balao.style.display = 'block';
@@ -290,10 +290,9 @@
             btn.innerText = "ENVIANDO...";
             btn.disabled = true;
 
-            // AQUI FOI ALTERADA A LÓGICA DE ENVIO PARA EVITAR ERRO NO GOOGLE
+            // ALTERAÇÃO DO MOTOR DE ENVIO: URLSearchParams + no-cors para evitar erro de rede
             const formData = new FormData(f);
             
-            // Ajuste na data para o formato brasileiro
             const dataNasc = formData.get('nascimento');
             if(dataNasc) {
                 const partes = dataNasc.split('-');
@@ -303,26 +302,24 @@
                 }
             }
 
-            // Transformando em URLSearchParams para garantir que o Google aceite sem erro
             const params = new URLSearchParams(formData);
 
             fetch(scriptURL, { 
                 method: 'POST', 
                 body: params,
-                header: { 'Content-Type': 'application/x-www-form-urlencoded' }
+                mode: 'no-cors' // <-- MATA O ERRO DE SEGURANÇA NO NAVEGADOR
             })
-            .then(response => {
+            .then(() => {
                 document.getElementById('promo-card').style.display = 'none';
                 document.getElementById('titles').style.display = 'none';
                 document.getElementById('span-nome').innerText = f.nome.value.split(' ')[0].toUpperCase();
                 f.style.display = 'none';
                 document.getElementById('sucesso').style.display = 'block';
                 window.scrollTo(0,0);
-            })
-            .catch(error => { 
+            }).catch(() => { 
                 btn.innerText = "ERRO AO ENVIAR!"; 
-                btn.disabled = false;
-                console.error('Erro no envio:', error);
+                btn.disabled = false; 
+                alert("Ocorreu um problema na conexão. Verifique sua internet.");
             });
         };
     </script>
