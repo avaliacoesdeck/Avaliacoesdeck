@@ -155,12 +155,12 @@
                     <br><span style="font-weight: normal; font-size: 0.75rem; opacity: 0.8; display: block; margin-top: 3px;">marque uma das opções:</span>
                 </label>
                 <div class="opcoes-grid" id="grupo-como-soube">
-                    <div class="opcao-item"><input type="radio" name="como_soube" id="opt-insta" value="Instagram" required><label for="opt-insta">Instagram</label></div>
-                    <div class="opcao-item"><input type="radio" name="como_soube" id="opt-face" value="Facebook"><label for="opt-face">Facebook</label></div>
-                    <div class="opcao-item"><input type="radio" name="como_soube" id="opt-google" value="Google"><label for="opt-google">Google</label></div>
-                    <div class="opcao-item"><input type="radio" name="como_soube" id="opt-amigos" value="Amigos/Familia"><label for="opt-amigos">Amigos/Familia</label></div>
-                    <div class="opcao-item"><input type="radio" name="como_soube" id="opt-passando" value="Passando"><label for="opt-passando" style="font-size: 0.55rem;">Passando em Frente</label></div>
-                    <div class="opcao-item"><input type="radio" name="como_soube" id="opt-outros" value="Outros"><label for="opt-outros">Outros</label></div>
+                    <div class="opcao-item"><input type="radio" name="comoConheceu" id="opt-insta" value="Instagram" required><label for="opt-insta">Instagram</label></div>
+                    <div class="opcao-item"><input type="radio" name="comoConheceu" id="opt-face" value="Facebook"><label for="opt-face">Facebook</label></div>
+                    <div class="opcao-item"><input type="radio" name="comoConheceu" id="opt-google" value="Google"><label for="opt-google">Google</label></div>
+                    <div class="opcao-item"><input type="radio" name="comoConheceu" id="opt-amigos" value="Amigos/Familia"><label for="opt-amigos">Amigos/Familia</label></div>
+                    <div class="opcao-item"><input type="radio" name="comoConheceu" id="opt-passando" value="Passando"><label for="opt-passando" style="font-size: 0.55rem;">Passando em Frente</label></div>
+                    <div class="opcao-item"><input type="radio" name="comoConheceu" id="opt-outros" value="Outros"><label for="opt-outros">Outros</label></div>
                 </div>
                 
                 <label class="pergunta-label"><i class="fas fa-comment-dots"></i> Sugestões e Elogios:</label>
@@ -243,10 +243,12 @@
             const cleanZap = inputZap.value.replace(/\D/g, "");
             const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-            const radioGroups = ['refeicao', 'atendimento', 'recomenda', 'como_soube'];
+            // AQUI FOI ALTERADO: como_soube para comoConheceu
+            const radioGroups = ['refeicao', 'atendimento', 'recomenda', 'comoConheceu'];
             for (let name of radioGroups) {
                 if(!f.querySelector(`input[name="${name}"]:checked`)) {
-                    let container = document.getElementById(name === 'como_soube' ? 'grupo-como-soube' : `grupo-${name}`);
+                    // Ajuste no seletor do container
+                    let container = document.getElementById(name === 'comoConheceu' ? 'grupo-como-soube' : `grupo-${name}`);
                     let balao = container.previousElementSibling.querySelector('.balao-erro');
                     balao.style.display = 'block';
                     balao.scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -288,9 +290,11 @@
             btn.innerText = "ENVIANDO...";
             btn.disabled = true;
 
+            // AQUI FOI ALTERADA A LÓGICA DE ENVIO PARA EVITAR ERRO NO GOOGLE
             const formData = new FormData(f);
-            const dataNasc = formData.get('nascimento');
             
+            // Ajuste na data para o formato brasileiro
+            const dataNasc = formData.get('nascimento');
             if(dataNasc) {
                 const partes = dataNasc.split('-');
                 if(partes.length === 3) {
@@ -299,15 +303,27 @@
                 }
             }
 
-            fetch(scriptURL, { method: 'POST', body: formData })
-                .then(() => {
-                    document.getElementById('promo-card').style.display = 'none';
-                    document.getElementById('titles').style.display = 'none';
-                    document.getElementById('span-nome').innerText = f.nome.value.split(' ')[0].toUpperCase();
-                    f.style.display = 'none';
-                    document.getElementById('sucesso').style.display = 'block';
-                    window.scrollTo(0,0);
-                }).catch(() => { btn.innerText = "ERRO!"; btn.disabled = false; });
+            // Transformando em URLSearchParams para garantir que o Google aceite sem erro
+            const params = new URLSearchParams(formData);
+
+            fetch(scriptURL, { 
+                method: 'POST', 
+                body: params,
+                header: { 'Content-Type': 'application/x-www-form-urlencoded' }
+            })
+            .then(response => {
+                document.getElementById('promo-card').style.display = 'none';
+                document.getElementById('titles').style.display = 'none';
+                document.getElementById('span-nome').innerText = f.nome.value.split(' ')[0].toUpperCase();
+                f.style.display = 'none';
+                document.getElementById('sucesso').style.display = 'block';
+                window.scrollTo(0,0);
+            })
+            .catch(error => { 
+                btn.innerText = "ERRO AO ENVIAR!"; 
+                btn.disabled = false;
+                console.error('Erro no envio:', error);
+            });
         };
     </script>
 </body>
