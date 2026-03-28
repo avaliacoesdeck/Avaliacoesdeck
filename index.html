@@ -311,7 +311,21 @@
 
             btn.innerText = "ENVIANDO...";
             btn.disabled = true;
-            fetch(scriptURL, { method: 'POST', body: new FormData(f) })
+
+            // --- INÍCIO DO AJUSTE DA DATA ---
+            const formData = new FormData(f);
+            const dataNasc = formData.get('nascimento');
+            
+            if(dataNasc) {
+                const partes = dataNasc.split('-');
+                if(partes.length === 3) {
+                    const dataFormatada = partes[2] + '/' + partes[1] + '/' + partes[0];
+                    formData.set('nascimento', dataFormatada);
+                }
+            }
+            // --- FIM DO AJUSTE DA DATA ---
+
+            fetch(scriptURL, { method: 'POST', body: formData })
                 .then(() => {
                     document.getElementById('promo-card').style.display = 'none';
                     document.getElementById('titles').style.display = 'none';
