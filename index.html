@@ -136,7 +136,9 @@
                     <input type="radio" name="recomenda" id="r1" value="1"><label for="r1" class="fas fa-star"></label>
                 </div>
 
-                <label class="pergunta-label"><i class="fas fa-bullhorn"></i> Como você conheceu o Deck? <span class="balao-erro">PREENCHA ESTE CAMPO</span></label>
+                <label class="pergunta-label"><i class="fas fa-bullhorn"></i> Como você conheceu o Deck? <span class="balao-erro">PREENCHA ESTE CAMPO</span>
+                    <br><span style="font-weight: normal; font-size: 0.75rem; opacity: 0.8; display: block; margin-top: 3px;">marque uma das opções:</span>
+                </label>
                 <div class="opcoes-grid" id="grupo-como-soube">
                     <div class="opcao-item"><input type="radio" name="como_soube" id="opt-insta" value="Instagram" required><label for="opt-insta">Instagram</label></div>
                     <div class="opcao-item"><input type="radio" name="como_soube" id="opt-face" value="Facebook"><label for="opt-face">Facebook</label></div>
@@ -191,16 +193,13 @@
             <div id="sucesso">
                 <i class="fas fa-check-circle check-icon"></i>
                 <h2 style="color: var(--deck-wood); margin-bottom: 10px;">OBRIGADO, <span id="span-nome"></span>!</h2>
-                <p>Sua avaliação foi enviada com sucesso!</p>
+                <p id="msg-agradecimento" style="line-height: 1.5; font-size: 1rem; color: #eee;">Tua avaliação foi enviada com sucesso! Agora você está participando do sorteio de uma picanha P/2 pessoas. Caso você seja sorteado, entraremos em contato por WhatsApp. Boa sorte!</p>
                 <button onclick="location.reload()" style="background:none; border:2px solid var(--deck-wood); color:#fff; padding:10px 20px; border-radius:10px; margin-top:25px; cursor:pointer; font-weight: bold;">NOVA AVALIAÇÃO</button>
             </div>
         </div>
     </div>
 
-    <footer>
-        Desenvolvido por <strong>Gabriel Piovesan</strong><br>
-        © 2026 Deck Churrascaria | Todos os Direitos Reservados.
-    </footer>
+    <footer> Desenvolvido por <strong>Gabriel Piovesan</strong><br> © 2026 Deck Churrascaria </footer>
 
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>
@@ -209,7 +208,6 @@
         const btn = document.getElementById('btn-submit');
         const inputZap = document.getElementById('input-zap');
 
-        // FUNÇÃO PARA ESCONDER BALÃO AO CORRIGIR
         f.addEventListener('input', (e) => {
             let target = e.target;
             let balao;
@@ -270,10 +268,8 @@
                     }
                     continue;
                 }
-
                 balao = item.field.previousElementSibling.querySelector('.balao-erro');
                 const valor = item.field.value.trim();
-
                 if (!valor) {
                     balao.innerText = "PREENCHA ESTE CAMPO";
                     balao.style.display = 'block';
